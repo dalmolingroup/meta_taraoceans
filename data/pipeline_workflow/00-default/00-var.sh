@@ -2,31 +2,28 @@
 
 ### Declaring variables
 
-local_address="/home/bcfsantiago/bcfsantiago/master_degree/taraocean/"
-protocol="/home/bcfsantiago/bcfsantiago/master_degree/taraocean/pipeProtocol/Protocol/"
-db_kaiju="/home/bcfsantiago/master_degree/dbs/kaiju"
+local_address="/~/master_degree/taraocean/"
+protocol="/~/master_degree/taraocean/pipeProtocol/Protocol/"
+db_kaiju="/~/master_degree/dbs/kaiju"
 
-data="/home/bcfsantiago/master_degree/taraocean/pipeProtocol/Protocol/data"
-raw="/home/bcfsantiago/master_degree/taraocean/pipeProtocol/Protocol/data/raw"
-trimmed="/home/bcfsantiago/master_degree/taraocean/pipeProtocol/Protocol/data/trimmed"
-removal="/home/bcfsantiago/master_degree/taraocean/pipeProtocol/Protocol/data/removal"    
-reference="/home/bcfsantiago/master_degree/taraocean/pipeProtocol/Protocol/data/removal/reference"
-index_remo="/home/bcfsantiago/master_degree/taraocean/pipeProtocol/Protocol/data/removal/index/host"
-assembled="/home/bcfsantiago/master_degree/taraocean/pipeProtocol/Protocol/data/assembled"
-collapsed="/home/bcfsantiago/master_degree/taraocean/pipeProtocol/Protocol/data/collapsed"
+data="/~/master_degree/taraocean/pipeProtocol/Protocol/data"
+raw="/~/master_degree/taraocean/pipeProtocol/Protocol/data/raw"
+trimmed="/~/master_degree/taraocean/pipeProtocol/Protocol/data/trimmed"
+removal="/~/master_degree/taraocean/pipeProtocol/Protocol/data/removal"    
+reference="/~/master_degree/taraocean/pipeProtocol/Protocol/data/removal/reference"
+index_remo="/~/master_degree/taraocean/pipeProtocol/Protocol/data/removal/index/host"
+assembled="/~/master_degree/taraocean/pipeProtocol/Protocol/data/assembled"
+collapsed="/~/master_degree/taraocean/pipeProtocol/Protocol/data/collapsed"
 
-alignment="/home/bcfsantiago/master_degree/taraocean/pipeProtocol/Protocol/alignment"
-db_alig="/home/bcfsantiago/master_degree/taraocean/pipeProtocol/Protocol/alignment/db"
-index_alig="/home/bcfsantiago/master_degree/taraocean/pipeProtocol/Protocol/alignment/index/nr"
+alignment="/~/master_degree/taraocean/pipeProtocol/Protocol/alignment"
+db_alig="/~/master_degree/taraocean/pipeProtocol/Protocol/alignment/db"
+index_alig="/~/master_degree/taraocean/pipeProtocol/Protocol/alignment/index/nr"
 
-taxonomic="/home/bcfsantiago/master_degree/taraocean/pipeProtocol/Protocol/taxonomic"
-reduced="/home/bcfsantiago/master_degree/taraocean/pipeProtocol/Protocol/taxonomic/reduced"
+taxonomic="/~/master_degree/taraocean/pipeProtocol/Protocol/taxonomic"
+reduced="/~/master_degree/taraocean/pipeProtocol/Protocol/taxonomic/reduced"
 
-functional="/home/bcfsantiago/master_degree/taraocean/pipeProtocol/Protocol/functional"
-db_func="/home/bcfsantiago/master_degree/taraocean/pipeProtocol/Protocol/functional/db"
-
-# index_remo_diego="/scratch/global/dadamorais/Protocol/data/removal/index/hs102"
-# index_alig_diego="/scratch/global/dadamorais/Protocol/alignment/index/nr160121"
+functional="/~/master_degree/taraocean/pipeProtocol/Protocol/functional"
+db_func="/~/master_degree/taraocean/pipeProtocol/Protocol/functional/db"
 
 url="ftp://ftp.sra.ebi.ac.uk/vol1/fastq/"
 slash="/"

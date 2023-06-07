@@ -1,24 +1,26 @@
-##############################################################################################################
-##################################### Preparacao do Ambiente de Trabalho #####################################
+########################################################################################################
+##################################### work environment preparation #####################################
+########################################################################################################
 ##############################################################################################################
 
-##### Instalando pacotes do CRAN
+##### Installing CRAN packages
 # install.packages(c("data.table","dplyr","tidyr","ggplot2","pals","wordcloud2"))
 # install.packages(c("igraph","RColorBrewer","classInt"))
-##### Instalando os pacotes do Bioconductor
+##### Installing the Bioconductor packages
 # if (!requireNamespace("BiocManager", quietly = TRUE))
 #   install.packages("BiocManager")
 # 
 # BiocManager::install(c("TreeAndLeaf","RedeR", "GOSemSim"))
 
-# Carregando as bibliotecas
+### loading the libraries
 library(data.table); library(dplyr); library(tidyr); library(ggplot2); library(pals);
 library(GO.db); library(TreeAndLeaf); library(RedeR); library(igraph); library(GOSemSim); 
-library(RColorBrewer); library(classInt); library(wordcloud2); library(purrr); library(ggpubr)
+library(RColorBrewer); library(classInt); library(wordcloud2); library(purrr); library(ggpubr);
+library(pheatmap); library(openxlsx)
 
-##############################################################################################################
-########################################### Definicao de variaveis ###########################################
-##############################################################################################################
+##########################################################################################################
+########################################### DEFINING VARIABLES ###########################################
+##########################################################################################################
 path="~/meta_taraocean/data/results/input/functional/"
 runs <- c("ERR594324","ERR598972","ERR599023","ERR599025","ERR594385","ERR599021","ERR599164","ERR598970",
           "ERR599088","ERR599150","ERR594392","ERR594291","ERR598990","ERR599018","ERR599110","ERR594382",
@@ -58,11 +60,11 @@ depths_tt <- c("DCM","DCM","DCM","DCM","DCM","MES","MES","SRF","SRF","SRF","SRF"
                "MES","MES","MES","SRF","SRF","SRF","SRF","SRF","DCM","DCM","MES","MES","SRF","SRF",
                "DCM","MES","SRF","DCM","MES","SRF")
 
-##############################################################################################################
-############################################ Preparacao dos dados ############################################
-##############################################################################################################
+##########################################################################################################
+############################################ DATA PREPARATION ############################################
+##########################################################################################################
 
-##### Resgatando Amostras
+##### Retrieving samples
 for (run in runs) {
   file_name <- paste0(path,"counted_",run,".txt")
   vari_name <- paste0("counted_",run)
@@ -70,7 +72,7 @@ for (run in runs) {
   rm(file_name, vari_name, run)
 }
 
-##### Renomeando colunas
+##### Renaming columns
 for (run in runs) {
   data_name <- get(paste0("counted_",run))
   names(data_name)[1:2] <- c("Annotation", "n")
@@ -78,7 +80,7 @@ for (run in runs) {
   rm(data_name, run)
 } 
 
-##### Ordenando dataframes
+##### Ordering dataframes
 for (run in runs) {
   data_name <- get(paste0("counted_",run))
   vari_name <- paste0("counted_",run)
@@ -86,7 +88,7 @@ for (run in runs) {
   rm(data_name, vari_name, run)
 }
 
-##### Resgatando os 501 mais frequentes (incluindo os indefinidos)
+##### Retrieving the most frequent 501 (including the undefined)
 for (run in runs) {
   data_name <- get(paste0("counted_",run))
   vari_name <- paste0("counted_",run)
@@ -94,7 +96,7 @@ for (run in runs) {
   rm(data_name, vari_name, run)
 }
 
-##### Removendo os indefinidos
+##### Removing the undefined
 for (run in runs) {
   data_name <- get(paste0("counted_",run))
   vari_name <- paste0("counted_",run)
@@ -103,7 +105,7 @@ for (run in runs) {
   rm(data_name, vari_name, run)
 }
 
-##### Concatenando dataframes por camada e estação simultaneamente
+##### Concatenating dataframes by layer and station simultaneously
 df_SRF.064 <-list(counted_ERR598970,counted_ERR599088,counted_ERR599150,counted_ERR594392)
 df_SRF.065 <-list(counted_ERR594320,counted_ERR598979,counted_ERR599146,counted_ERR594359,counted_ERR594361)
 df_SRF.068 <-list(counted_ERR599129,counted_ERR599171,counted_ERR599174,counted_ERR594318,counted_ERR594297,counted_ERR594391)
@@ -131,7 +133,7 @@ df_MES.098 <-list(counted_ERR599071,counted_ERR599085)
 df_MES.111 <-list(counted_ERR599086)
 df_MES.112 <-list(counted_ERR599072)
 
-###### Criando dataframes a partir das listas concatenadas 
+###### Creating dataframes from concatenated lists 
 for(depth in depths){
   for(station in stations){
     data_name <- get(paste0("df_",depth,".",station))
@@ -140,7 +142,7 @@ for(depth in depths){
   }
 }
 
-##### Somando colunas por termos iguais
+##### Adding columns by like terms
 for(depth in depths){
   for(station in stations){
     data_name <- get(paste0("datafinal_",depth,".",station))
@@ -149,7 +151,7 @@ for(depth in depths){
   }
 }
 
-##### Ordenando dataframes
+##### Ordering dataframes
 for(depth in depths){
   for(station in stations){
     data_name <- get(paste0("datafinal_",depth,".",station))
@@ -158,7 +160,7 @@ for(depth in depths){
   }
 }
 
-##### Adicionando colunas nos dataframes
+##### Adding columns to dataframes
 datafinal_SRF.064$depth<-1;datafinal_SRF.065$depth<-1;datafinal_SRF.068$depth<-1;datafinal_SRF.076$depth<-1
 datafinal_SRF.078$depth<-1;datafinal_SRF.098$depth<-1;datafinal_SRF.111$depth<-1;datafinal_SRF.112$depth<-1
 datafinal_DCM.064$depth<-2;datafinal_DCM.065$depth<-2;datafinal_DCM.068$depth<-2;datafinal_DCM.076$depth<-2
@@ -173,7 +175,7 @@ datafinal_DCM.078$station<-078;datafinal_DCM.098$station<-098;datafinal_DCM.111$
 datafinal_MES.064$station<-064;datafinal_MES.065$station<-065;datafinal_MES.068$station<-068;datafinal_MES.076$station<-076
 datafinal_MES.078$station<-078;datafinal_MES.098$station<-098;datafinal_MES.111$station<-111;datafinal_MES.112$station<-112
 
-# ##### Agrupando dataframes por estacao e camada simultaneamente
+# ##### Grouping dataframes by season and layer simultaneously
 # datafinal_final <- rbind(datafinal_SRF.064,datafinal_SRF.065,datafinal_SRF.068,datafinal_SRF.076,
 #                         datafinal_SRF.078,datafinal_SRF.098,datafinal_SRF.111,datafinal_SRF.112,
 #                         datafinal_DCM.064,datafinal_DCM.065,datafinal_DCM.068,datafinal_DCM.076,
@@ -181,7 +183,7 @@ datafinal_MES.078$station<-078;datafinal_MES.098$station<-098;datafinal_MES.111$
 #                         datafinal_MES.064,datafinal_MES.065,datafinal_MES.068,datafinal_MES.076,
 #                         datafinal_MES.078,datafinal_MES.098,datafinal_MES.111,datafinal_MES.112)
 
-##### Exporatando dataframes
+##### Exporting dataframes
 for(depth in depths){
   for(station in stations){
     data_name <- get(paste0("datafinal_",depth,".",station))
@@ -190,11 +192,11 @@ for(depth in depths){
   }
 }
 
-##############################################################################################################
-####################################### Configuracao dos dataframes para os plots ############################
-##############################################################################################################
+######################################################################################################################
+####################################### Configuration of dataframes for the plots (RedeR) ############################
+######################################################################################################################
 
-##### Resgatando Amostras
+##### Retrieving samples
 for (depth in depths) {
   for(station in stations){
     file_name <- paste0("~/meta_taraocean/data/results/output/functional/goterms/datafinal_",depth,".",station,".csv")
@@ -204,7 +206,7 @@ for (depth in depths) {
   rm(file_name, vari_name, depth, station)
 }
 
-##### Resgatando termos GO das amostras
+##### Retrieving GO terms from samples
 for (depth in depths) {
   for(station in stations){
     data_name <- get(paste0("data_",depth,".",station))
@@ -214,7 +216,7 @@ for (depth in depths) {
   rm(data_name, vari_name, depth, station)
 }
 
-##### Resgatando ontologias e descricoes pelos termos
+##### Retrieving ontologies and descriptions by terms
 getGODescription <- function(GOs){
   BP <- names(as.list(GO.db::GOBPCHILDREN))
   CC <- names(as.list(GO.db::GOCCCHILDREN))
@@ -233,7 +235,7 @@ getGODescription <- function(GOs){
   return(result)
 }
 
-##### Adicionando coluna de ontologia
+##### Adding ontology column
 for (depth in depths) {
   for(station in stations){
     data_name1 <- get(paste0("data_",depth,".",station))
@@ -245,7 +247,7 @@ for (depth in depths) {
 }
 
 
-##### Omitindo NAs
+##### Omitting NAs
 for (depth in depths) {
   for(station in stations){
     data_name <- get(paste0("data_",depth,".",station))
@@ -256,7 +258,7 @@ for (depth in depths) {
 }
 
 
-##### Restringindo o dataframe aa ontologia 'BP'
+##### Restricting the dataframe to the 'BP' ontology
 for (depth in depths) {
   for(station in stations){
     data_name <- get(paste0("data_",depth,".",station))
@@ -266,10 +268,10 @@ for (depth in depths) {
   rm(data_name, depth, station)
 }
 
-##### Colocando os termos em uma lista
+##### Putting terms in a list
 xx <- as.list(GOTERM)
 
-##### Resgatando coluna de descricao
+##### Retrieving description column
 for (depth in depths) {
   for(station in stations){
     data_name <- get(paste0("data_",depth,".",station))
@@ -292,12 +294,11 @@ for (depth in depths) {
   rm(data_name, depth, station)
 }
 
-##### Definindo cutoff
+##### Defining cutoff
 cutoff <- 0 
-# valor entre 0 e 0.99 para remover caudas do plot, se nao tem
-# caudas que atrapalham a visualizacao, pode deixar em 0
+# value between 0 and 0.99 to remove tails from the plot, if there are no tails that hinder the visualization, you can leave it at 0
 
-##### Definindo os termos pelas amostras
+##### Defining terms by samples
 for (depth in depths) {
   for(station in stations){
     data_name <- get(paste0("data_",depth,".",station))
@@ -307,7 +308,7 @@ for (depth in depths) {
   rm(data_name, vari_name, depth, station)
 }
 
-##### Definindo ontologia 'BP'
+##### Defining 'BP' ontology
 semData <- godata(ont = "BP")
 
 ##### Sim Terms
@@ -320,7 +321,7 @@ for (depth in depths) {
   rm(data_name, vari_name, depth, station)
 }
 
-##### Resgatando atributos 
+##### Retrieving attributes
 for (depth in depths) {
   for(station in stations){
     data_name1 <- get(paste0("mSim_",depth,".",station))
@@ -339,7 +340,7 @@ for (depth in depths) {
   rm(data_name1, data_name2, data_name3, vari_name1, vari_name2, depth, station)
 }
 
-##### Definindo metodo de agrupamento
+##### Defining grouping method
 for (depth in depths) {
   for(station in stations){
     data_name <- get(paste0("mSim_",depth,".",station))
@@ -349,7 +350,7 @@ for (depth in depths) {
   rm(data_name, vari_name, depth, station)
 }
 
-##### Desenhando a arvore
+##### Drawing the tree
 for (depth in depths) {
   for(station in stations){
     data_name <- get(paste0("hc_",depth,".",station))
@@ -359,7 +360,7 @@ for (depth in depths) {
   rm(data_name, vari_name, depth, station)
 }
 
-# Mapeando a arvore
+##### Mapping the tree
 for (depth in depths) {
   for(station in stations){
     data_name1 <- get(paste0("tal_",depth,".",station))
@@ -370,10 +371,10 @@ for (depth in depths) {
   rm(data_name1, data_name2, vari_name, depth, station)
 }
 
-##### Definindo cores
+##### Defining colors
 pal <- brewer.pal(9, "Reds")
 
-##### Definindo atributo: nos
+##### Setting attribute: nodes
 for (depth in depths) {
   for(station in stations){
     data_name <- get(paste0("tal_",depth,".",station))
@@ -383,7 +384,7 @@ for (depth in depths) {
   rm(data_name, vari_name, depth, station)
 }
 
-##### Definindo atributo: cor do no
+##### Setting attribute: node color
 for (depth in depths) {
   for(station in stations){
     data_name <- get(paste0("tal_",depth,".",station))
@@ -395,7 +396,7 @@ for (depth in depths) {
 }
 
 
-##### Definindo atributo: tamanho do no
+##### Setting attribute: node size
 for (depth in depths) {
   for(station in stations){
     data_name <- get(paste0("tal_",depth,".",station))
@@ -406,7 +407,7 @@ for (depth in depths) {
   rm(data_name, vari_name, depth, station)
 }
 
-##### Definindo atributo: fonte da legenda do no
+##### Setting attribute: node caption font
 for (depth in depths) {
   for(station in stations){
     data_name <- get(paste0("tal_",depth,".",station))
@@ -416,7 +417,7 @@ for (depth in depths) {
   rm(data_name, vari_name, depth, station)
 }
 
-##### Definindo atributo: largura das margens
+##### Setting attribute: width of margins
 for (depth in depths) {
   for(station in stations){
     data_name <- get(paste0("tal_",depth,".",station))
@@ -426,7 +427,7 @@ for (depth in depths) {
   rm(data_name, vari_name, depth, station)
 }
 
-##### Definindo atributo: cor das margens
+##### Defining attribute: margins color
 for (depth in depths) {
   for(station in stations){
     data_name <- get(paste0("tal_",depth,".",station))
@@ -436,7 +437,7 @@ for (depth in depths) {
   rm(data_name, vari_name, depth, station)
 }
 
-##### Definindo atributo: cor das arestas
+##### Setting attribute: edge color
 for (depth in depths) {
   for(station in stations){
     data_name <- get(paste0("tal_",depth,".",station))
@@ -488,64 +489,6 @@ addGraph(obj = rdp, g = tal_MES.112)
 
 # relax(rdp, p1 = 25, p2 = 200, p3 = 5, p5 = 5, ps = TRUE)
 relax(rdp, p1 = 25, p3 = 5, p5 = 5, ps = TRUE)
-
-
-
-##### Tentativa de automatzacao dos plots
-
-# 
-# # rdp <- RedPort()
-# for (depth in depths) {
-#   for(station in stations){
-#     vari_name <- paste0("rdp_",depth,".",station)
-#     assign(vari_name, RedPort())
-#   }
-#   rm(vari_name, depth, station)
-# }
-# 
-# # calld(rdp)
-# for (depth in depths) {
-#   for(station in stations){
-#     data_name <- get(paste0("rdp_",depth,".",station))
-#     calld(data_name)
-#   }
-#   rm(data_name, depth, station)
-# }
-# 
-# # resetd(rdp)
-# for (depth in depths) {
-#   for(station in stations){
-#     data_name <- get(paste0("rdp_",depth,".",station))
-#     resetd(data_name)
-#   }
-#   rm(data_name, depth, station)
-# }
-# 
-# # addGraph(obj = rdp, g = tal)
-# for (depth in depths) {
-#   for(station in stations){
-#     data_name1 <- get(paste0("rdp_",depth,".",station))
-#     data_name2 <- get(paste0("tal_",depth,".",station))
-#     addGraph(obj = data_name1, g = data_name2)
-#   }
-#   rm(data_name1, data_name2, depth, station)
-# }
-# 
-# # relax(rdp, p1 = 25, p3 = 5, p5 = 5, ps = TRUE)
-# for (depth in depths) {
-#   for(station in stations){
-#     data_name <- get(paste0("rdp_",depth,".",station))
-#     relax(data_name, p1 = 25, p3 = 5, p5 = 5, ps = TRUE)
-#   }
-#   rm(data_name, depth, station)
-# }
-
-
-
-
-
-
-
 
 
 
@@ -802,13 +745,6 @@ for (depth in depths) {
 ####################################################################################################
 
 ##### Interface
-# rdp <- RedPort()
-# calld(rdp)
-# resetd(rdp)
-# addGraph(obj = rdp, g = tal)
-# # relax(rdp, p1 = 25, p2 = 200, p3 = 5, p5 = 5, ps = TRUE)
-# relax(rdp, p1 = 25, p3 = 5, p5 = 5, ps = TRUE)
-
 rdp <- RedPort()
 calld(rdp)
 resetd(rdp)
@@ -862,61 +798,9 @@ addGraph(obj = rdp, g = tal_MES.112)
 relax(rdp, p1 = 25, p3 = 5, p5 = 5, ps = TRUE)
 
 
-
-##### Tentativa de automatzacao dos plots
-
-# 
-# # rdp <- RedPort()
-# for (depth in depths) {
-#   for(station in stations){
-#     vari_name <- paste0("rdp_",depth,".",station)
-#     assign(vari_name, RedPort())
-#   }
-#   rm(vari_name, depth, station)
-# }
-# 
-# # calld(rdp)
-# for (depth in depths) {
-#   for(station in stations){
-#     data_name <- get(paste0("rdp_",depth,".",station))
-#     calld(data_name)
-#   }
-#   rm(data_name, depth, station)
-# }
-# 
-# # resetd(rdp)
-# for (depth in depths) {
-#   for(station in stations){
-#     data_name <- get(paste0("rdp_",depth,".",station))
-#     resetd(data_name)
-#   }
-#   rm(data_name, depth, station)
-# }
-# 
-# # addGraph(obj = rdp, g = tal)
-# for (depth in depths) {
-#   for(station in stations){
-#     data_name1 <- get(paste0("rdp_",depth,".",station))
-#     data_name2 <- get(paste0("tal_",depth,".",station))
-#     addGraph(obj = data_name1, g = data_name2)
-#   }
-#   rm(data_name1, data_name2, depth, station)
-# }
-# 
-# # relax(rdp, p1 = 25, p3 = 5, p5 = 5, ps = TRUE)
-# for (depth in depths) {
-#   for(station in stations){
-#     data_name <- get(paste0("rdp_",depth,".",station))
-#     relax(data_name, p1 = 25, p3 = 5, p5 = 5, ps = TRUE)
-#   }
-#   rm(data_name, depth, station)
-# }
-
-
-
-##############################################################################################################
-############################################### Arvore da palavras ###########################################
-##############################################################################################################
+######################################################################################################
+############################################### Word cloud ###########################################
+######################################################################################################
 
 stg.col <- c("#424242", "#76ff03", "#004d40", "#795548", "#80deea", "#311b92", "#00e676", "#66bb6a", "#0d47a1", "#7986cb", 
              "#5c6bc0", "#78909c", "#455a64", "#bf360c", "#558b2f", "#4a148c", "#9e9d24", "#6a1b9a", "#26a69a", "#757575", 
@@ -925,14 +809,14 @@ stg.col <- c("#424242", "#76ff03", "#004d40", "#795548", "#80deea", "#311b92", "
              "#827717", "#f06292", "#673ab7", "#00b0ff", "#ef5350", "#ff80ab", "#ff5722", "#ff5252", "#e57373", "#fdd835")
 
 
-##### Concatenando dataframes por camada
+##### Concatenating dataframes by layer
 data_SRF <- rbind(data_SRF.064,data_SRF.065,data_SRF.068,data_SRF.076,data_SRF.078,data_SRF.098,data_SRF.111,data_SRF.112)
 data_DCM <- rbind(data_DCM.064,data_DCM.065,data_DCM.068,data_DCM.076,data_DCM.078,data_DCM.098,data_DCM.111,data_DCM.112)
 data_MES <- rbind(data_MES.064,data_MES.065,data_MES.068,data_MES.076,data_MES.078,data_MES.098,data_MES.111,data_MES.112)
 
 data_terms <- cbind(data_SRF, data_DCM, data_MES)
 
-##### Exportando dataframes
+##### Exporting dataframes
 for(depth in depths){
   for(station in stations){
     data_name <- get(paste0("data_",depth))
@@ -950,9 +834,7 @@ for(depth in depths){
 }
 
 
-
-
-##### Somando colunas por termos iguais
+##### Adding columns by like terms
 for(depth in depths){
   data_name <- get(paste0("data_",depth))
   vari_name <- paste0("data_",depth)
@@ -961,7 +843,7 @@ for(depth in depths){
   rm(data_name, vari_name, depth)
 }
 
-##### Ordenando dataframes
+##### Ordering dataframes
 for(depth in depths){
   data_name <- get(paste0("data_",depth))
   vari_name <- paste0("data_",depth)
@@ -969,14 +851,14 @@ for(depth in depths){
   rm(data_name, vari_name, depth)
 }
 
-##### Criando dataframes de cada camada para as nuvens
+##### Creating dataframes from each layer to the clouds
 for(depth in depths){
   data_name <- get(paste0("data_",depth))
   vari_name <- paste0("cloud_",depth)
   assign(vari_name, data_name[1:50,])
 }
 
-##### Plotando nuvens das camadas
+##### Plotting clouds from layers
 plot.cloud_SRF <- wordcloud2(data=cloud_SRF, size=0.25, minRotation = -pi/1, 
                              fontFamily = 'Segoe UI', fontWeight = 'normal',
                              maxRotation = -pi/1, rotateRatio = 0, color="random-dark", 
@@ -995,16 +877,7 @@ plot.cloud_SRF
 plot.cloud_DCM
 plot.cloud_MES
 
-##### Exporatando nuvens das camadas
-# for(depth in depths){
-#   data_name <- get(paste0("plot.cloud_",depth))
-#   vari_name <- paste0("plot.cloud_",depth,".png")
-#   png(paste0("clouds/",vari_name))
-#   data_name
-#   dev.off()
-# }
-
-##### Criando dataframes de cada estacao por camada para as nuvens
+##### Creating dataframes of each season by layer for the clouds
 for(depth in depths){
   for(station in stations) {
     data_name <- get(paste0("data_",depth,".",station))
@@ -1013,7 +886,7 @@ for(depth in depths){
   }
 }
 
-##### Plotando nuvens das estacoes por camadas
+##### Plotting stations clouds by layers
 wordcloud2(data=cloud_SRF.064, size=0.2, minRotation = -pi/1, 
            maxRotation = -pi/1, rotateRatio = 0, color='random-dark', 
            backgroundColor="white", shape="circle")
@@ -1092,71 +965,60 @@ wordcloud2(data=cloud_MES.112, size=0.3, minRotation = -pi/1,
 ################################################################################
 ################################################################################
 
-##### Conferindo termos exclusivos por camada
-
-
+##### Checking unique terms per tier
 data_SRF$depth <- "SRF"
 data_DCM$depth <- "DCM"
 data_MES$depth <- "MES"
 
 df <- bind_rows(data_SRF, data_DCM, data_MES)
 
-# Quais os principais processos exclusivos de cada camada?ERR599077
+# What are the key processes unique to each layer?
 df %>% 
   group_by(Annotation) %>% 
   mutate(exclusive = n()) %>% 
   ungroup() %>% 
   arrange(desc(exclusive), desc(n)) -> df2 
 
-# Quantos processos biológios são exclusivos de cada camada?
+# How many biological processes are unique to each layer?
 df2 %>% 
   filter(exclusive == 1) %>% 
   group_by(depth) %>% 
   summarise(n())
 
 
-# Dicionário amostras/camadas
+# Samples/Layers dictionary
 dict <- read.table("~/meta_taraocean/data/results/input/functional/runstationdepth.txt", 
                    header = T, sep = "\t", colClasses = rep("character", 3))
 
-# Unição de termos em comum por combinação de camadas 
+# Union of common terms by combining layers
 SRF_DCM <- union(data_DCM$Annotation, data_SRF$Annotation)
 SRF_MES <- union(data_SRF$Annotation, data_MES$Annotation)
 DCM_MES <- union(data_DCM$Annotation, data_MES$Annotation)
 
 
-# Função para obter o número de termos exclusivos em cada amostra de uma camada
-# em comparação aos termos das outras camadas
+# Function to get the number of unique terms in each sample of a layer compared to the terms of the other layers
 get_exclusive_distribution_sample <- function(depth, comparison) {
-  
   sapply(dict$run[dict$depth == depth], function(x) {
-    
     get(paste0("counted_", x)) %>% 
       pull(Annotation) %>% 
       base::setdiff(.,comparison) -> gos
-    
     select(GO.db, keys = gos, columns = "ONTOLOGY", keytype = "GOID") %>% 
       filter(ONTOLOGY == "BP") %>% 
       pull(GOID) %>% 
       unique() %>% 
       length()
-    
   })
-  
 }
 
 MES_exclusive_distribution_sample <- get_exclusive_distribution_sample("MES", SRF_DCM)
 SRF_exclusive_distribution_sample <- get_exclusive_distribution_sample("SRF", DCM_MES)
 DCM_exclusive_distribution_sample <- get_exclusive_distribution_sample("DCM", SRF_MES)
 
-# Pegar descrição de quais termos são exclusivos de cada camada (para citar no paper)
+# Get description of which terms are unique to each layer (to cite in the paper)
 get_exclusive_distribution_TERMS <- function(x, y) {
-  
   gos <- setdiff(x, y)
-  
   select(GO.db, keys = gos, columns = c("TERM", "ONTOLOGY"), keytype = "GOID") %>% 
     filter(ONTOLOGY == "BP")
-  
 }
 
 MES_exclusive_distribution_TERMS <- get_exclusive_distribution_TERMS(x = unique(data_MES$Annotation),
@@ -1165,7 +1027,7 @@ SRF_exclusive_distribution_TERMS <- get_exclusive_distribution_TERMS(x = unique(
                                                                      y = unique(c(data_DCM$Annotation, data_MES$Annotation)))
 DCM_exclusive_distribution_TERMS <- get_exclusive_distribution_TERMS(x = unique(data_DCM$Annotation),
                                                                      y = unique(c(data_MES$Annotation, data_SRF$Annotation)))
-# Plotar
+# Plotting
 build_df <- function(v, depth) {
   data.frame(n = unname(v), depth = depth)
 }
@@ -1185,45 +1047,40 @@ exc_term_sample <- ggplot(df_plot, aes(x = depth, y = n)) +
                      method = "wilcox.test", exact = F) +
   labs(x = "", y = "Number of exclusive terms by sample")
 
-### Salvando imagens (PDF)
+### exporting files (PDF)
 ggsave(filename = "~/meta_taraocean/data/results/output/functional/plots/pdf/mounting/exc_term_sample.pdf", exc_term_sample,
        width = 15, height = 10, dpi = 500, units = "cm", device='pdf')
 
-### Salvando imagens (PNG)
+### exporting files (PNG)
 ggsave(filename = "~/meta_taraocean/data/results/output/functional/plots/png/mounting/exc_term_sample.png", exc_term_sample,
        width = 15, height = 10, dpi = 500, units = "cm", device='png')
 
-### Salvando imagens (SVG)
+### exporting files (SVG)
 exc_term_sample
 dev.copy(svg,"~/meta_taraocean/data/results/output/functional/plots/svg/mounting/exc_term_sample.svg", width = 7, height = 5)
 dev.off()
 
 
-# Por estação -------------------------------------------------------------
+# By station -------------------------------------------------------------
 
 get_exclusive_distribution_station <- function(depth, comparison) {
-  
   sapply(unique(dict$station[dict$depth == depth]), function(x) {
-    
     get(paste0("data_", depth, ".", x)) %>% 
       pull(Annotation) %>% 
       base::setdiff(.,comparison) -> gos
-    
     select(GO.db, keys = gos, columns = "ONTOLOGY", keytype = "GOID") %>% 
       filter(ONTOLOGY == "BP") %>% 
       pull(GOID) %>% 
       unique() %>% 
       length()
-    
   })
-  
 }
 
 MES_exclusive_distribution_station <- get_exclusive_distribution_station("MES", SRF_DCM)
 SRF_exclusive_distribution_station <- get_exclusive_distribution_station("SRF", DCM_MES)
 DCM_exclusive_distribution_station <- get_exclusive_distribution_station("DCM", SRF_MES)
 
-# Plotar
+# Plotting
 build_df <- function(v, depth) {
   data.frame(n = unname(v), depth = depth)
 }
@@ -1245,15 +1102,15 @@ exc_term_station <- ggplot(df_plot, aes(x = depth, y = n)) +
                      method = "wilcox.test", exact = F) +
   labs(x = "", y = "Number of exclusive terms in each depth layer by station")
 
-### Salvando imagens (PDF)
+### exporting files (PDF)
 ggsave(filename = "~/meta_taraocean/data/results/output/functional/plots/pdf/mounting/exc_term_station.pdf", exc_term_station,
        width = 10, height = 12, dpi = 500, units = "cm", device='pdf')
 
-### Salvando imagens (PNG)
+### exporting files (PNG)
 ggsave(filename = "~/meta_taraocean/data/results/output/functional/plots/png/mounting/exc_term_station.png", exc_term_station,
        width = 15, height = 12, dpi = 500, units = "cm", device='png')
 
-### Salvando imagens (SVG)
+### exporting files (SVG)
 exc_term_station
 dev.copy(svg,"~/meta_taraocean/data/results/output/functional/plots/svg/mounting/exc_term_station.svg", width = 7, height = 5)
 dev.off()
@@ -1261,151 +1118,40 @@ dev.off()
 ###
 
 
+######################################################################################################
+################################################ PHEATMAP ############################################
+######################################################################################################
+
+cloud_DCM <- cloud_DCM %>%
+  mutate(region = "DCM")
+cloud_SRF <- cloud_SRF %>%
+  mutate(region = "SRF")
+cloud_MES <- cloud_MES %>%
+  mutate(region = "MES")
 
 
+all_terms <- bind_rows(cloud_DCM, cloud_MES, cloud_SRF)
 
+terms_wide <- all_terms %>%
+  pivot_wider(id_cols = region, names_from = desc, values_from = n) %>%
+  tibble::column_to_rownames(var = "region") %>%
+  as.matrix() %>%
+  log() %>%
+  t()
 
+write.xlsx(data.frame(terms_wide), "../../output/functional/goterms/Figure4_matrix.xlsx", rowNames = TRUE)
 
-
-
-
-
-
-
-
-
-
-
-
-
-##############################################################################################################
-####################################################### PCA ###########################################
-##############################################################################################################
-
-##### Transpondo os dataframes
-for (run in runs) {
-  data_name <- get(paste0("counted_",run))
-  vari_name <- paste0("trans_",run)
-  assign(vari_name, as.data.frame(t(data_name)))
-  rm(data_name, vari_name)
-  rm(run)
-}
-
-##### Resgatando os nomes para as colunas
-for (run in runs) {
-  data_name <- get(paste0("counted_",run))
-  vari_name <- paste0("colnames_",run)
-  assign(vari_name, data_name$Annotation)
-  rm(data_name, vari_name)
-  rm(run)
-}
-
-
-##### Renomeando colunas
-for (run in runs) {
-  data_name1 <- get(paste0("trans_",run))
-  data_name2 <- get(paste0("colnames_",run))
-  names(data_name1) <- data_name2
-  assign(paste0("trans_",run), data_name1)
-  rm(data_name1, data_name2)
-  rm(run)
-}
-
-##### Removendo a linha com os nomes das colunas
-for (run in runs) {
-  data_name <- get(paste0("trans_",run))
-  vari_name <- paste0("trans_",run)
-  data_name = data_name[-1,]
-  assign(vari_name, data_name)
-  rm(data_name)
-  rm(run)
-}
-
-
-library(dplyr); library(tidyr); library(pals); library(plyr); library(FactoMineR); library(ggplot2); 
-library(ggdendro); library(xlsx); library(cluster); library(devtools); library(factoextra); library(stats); 
-library(dendextend); library(MultivariateAnalysis); library(vegan); library(ggpubr); library(vegan);
-library(tidyverse); library(forcats); library(iNEXT)
-
-##### Criando os dataframes com todas as amostras
-data_PCA <- rbind.fill(trans_ERR594324,trans_ERR598972,trans_ERR599023,trans_ERR599025,trans_ERR594385,trans_ERR599021,trans_ERR599164,trans_ERR598970,
-                       trans_ERR599088,trans_ERR599150,trans_ERR594392,trans_ERR594291,trans_ERR598990,trans_ERR599018,trans_ERR599110,trans_ERR594382,
-                       trans_ERR594414,trans_ERR598960,trans_ERR599034,trans_ERR594320,trans_ERR598979,trans_ERR599146,trans_ERR594359,trans_ERR594361,
-                       trans_ERR599017,trans_ERR599056,trans_ERR599103,trans_ERR594294,trans_ERR594348,trans_ERR594415,trans_ERR598947,trans_ERR599131,
-                       trans_ERR594302,trans_ERR599129,trans_ERR599171,trans_ERR599174,trans_ERR594318,trans_ERR594297,trans_ERR594391,trans_ERR599040,
-                       trans_ERR599148,trans_ERR594321,trans_ERR594298,trans_ERR594355,trans_ERR599000,trans_ERR599154,trans_ERR594333,trans_ERR599010,
-                       trans_ERR599126,trans_ERR594310,trans_ERR594286,trans_ERR594354,trans_ERR599046,trans_ERR599101,trans_ERR594336,trans_ERR594303,
-                       trans_ERR599124,trans_ERR599159,trans_ERR594289,trans_ERR599006,trans_ERR599022,trans_ERR594340,trans_ERR594332,trans_ERR594411,
-                       trans_ERR599042,trans_ERR599079,trans_ERR599071,trans_ERR599085,trans_ERR599093,trans_ERR599120,trans_ERR598961,trans_ERR599086,
-                       trans_ERR599077,trans_ERR598957,trans_ERR599072,trans_ERR598954)
-
-##### Renomeando linhas com os nomes das amostras
-row.names(data_PCA) <- runs
-
-##### Convertendo NAs em valores nulos
-data_PCA[is.na(data_PCA)] <- 0
-
-##### Convertendo os dataframes de char para numeric
-data_PCA <- data_PCA %>% mutate_at(c(1:length(data_PCA)), as.numeric)
-
-##### Adicionando colunas categoricas
-samp  <- data_PCA 
-samp$depths <- depths_tt
-samp$stations <- stations_tt
-samp$samples <- runs
-samp <- subset(samp, select = c(depths,stations,samples))
-
-
-library(FactoMineR)
-library(pals)
-
-exp <- data_PCA
-samp <- samp
-
-
-# exp <- exp[(rownames(exp) != "ERR594333" & rownames(exp) != "ERR599086"), ]
-# exp <- exp[(rownames(exp) != "ERR594320" & rownames(exp) != "ERR594291" & rownames(exp) != "ERR598972"), ]
-
-# Obter a transposta da tabela de expressão
-# As variáveis devem ser representadas pelas colunas. Caso não estejam, fazer a transposta
-# da matriz com os dados.
-# t_data_pca <- t(data_pca)
-
-# PCA ----
-# Computar PCA com a função PCA() do FactoMineR
-pca_facto <- PCA(exp, graph = F)
-
-# Obter as coordenadas
-pca_components <- pca_facto$ind$coord
-
-# Estabelecer esquema de cores para cada grupo da análise 
-cols <- polychrome()[3:10] # numero de cores correspondente ao número de grupos
-names(cols) <- unique(samp$depths)
-
-# Plotar as duas primeiras componentes:
-plot(pca_components[,1], pca_components[,2], 
-     xlab = "PC 1", 
-     ylab = "PC 2", 
-     type = "p",
-     pch = 18,
-     col = cols[samp$depths]
+terms_pheatmap <- pheatmap(
+  terms_wide,
+  border_color = "white",
+  cluster_rows = FALSE,
+  color = RColorBrewer::brewer.pal(7, "Blues"),
+  angle_col = 0,
+  na_col = "#fafafa"
 )
 
-text(pca_components[,1]-3, pca_components[,2]-3, 
-     labels = paste(samp$samples), 
-     cex = 0.9)
+terms_pheatmap
 
-res.pca <- PCA(exp, graph = FALSE)
-
-
-library("factoextra")
-eig.val <- get_eigenvalue(res.pca)
-eig.val
-
-fviz_eig(res.pca, addlabels = TRUE, ylim = c(0, 50))
-
-
-
-
-
-
+# exporting files
+ggsave(terms_pheatmap, filename = "../../output/functional/plots/pdf/tara_terms_pheatmap.pdf", height = 8)
+ggsave(terms_pheatmap, filename = "../../output/functional/plots/png/tara_terms_pheatmap.png", height = 8)

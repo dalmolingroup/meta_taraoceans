@@ -1,8 +1,0 @@
-db = plyvel.DB('/home/bcfsantiago/master_degree/dbs/bastadb/prot_mapping.db', create_if_missing=False)
-
-db.get('MBA36612.1')
-db.get('MBA36612')
-
-db.get('BAR38090.1')
-db.get('BAR38090')
-

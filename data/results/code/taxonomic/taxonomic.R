@@ -1,16 +1,16 @@
-##############################################################################################################
-##################################### Preparação do Ambiente de Trabalho #####################################
-##############################################################################################################
+########################################################################################################
+##################################### work environment preparation #####################################
+########################################################################################################
 
-# Instalando pacotes necessários para o cumprimento dos requisitos e solicitações do presente trabalho
+### installing necessary packages to fulfill the requirements and requests of this work
 # install.packages('dplyr'); # install.packages('tidyr'); # install.packages('ggplot2')
 # install.packages("pals"); # install.packages("factoextra"); # install.packages("patchwork")
 
-# Carregando as bibliotecas
+### loading the libraries
 library(dplyr); library(tidyr); library(ggplot2); 
 library(pals); library(factoextra); library(patchwork)
 
-###################################################################### DEFININDO VARIAVEIS ######################################################################
+###################################################################### DEFINING VARIABLES ######################################################################
 path="~/meta_taraocean/data/results/input/taxonomic/"
 taxons <- c("kingdom", "phylum", "class", "order", "family", "genus", "species")
 runs <- c("ERR594324","ERR598972","ERR599023","ERR599025","ERR594385","ERR599021","ERR599164","ERR598970",
@@ -24,7 +24,7 @@ runs <- c("ERR594324","ERR598972","ERR599023","ERR599025","ERR594385","ERR599021
           "ERR599042","ERR599079","ERR599071","ERR599085","ERR599093","ERR599120","ERR598961","ERR599086",
           "ERR599077","ERR598957","ERR599072","ERR598954")
 
-###################################################################### RESGATANDO AMOSTRAS ######################################################################
+###################################################################### RETRIEVING SAMPLES ######################################################################
 for (run in runs) {
   for (taxon in taxons){
     file_name <- paste0(path,taxon,"_",run,"_names.txt")
@@ -34,7 +34,7 @@ for (run in runs) {
   }
   rm(run, taxon)
 }
-###################################################################### RENOMEANDO COLUNAS ######################################################################
+###################################################################### RENAMING COLUMNS ######################################################################
 for (run in runs) {
   for (taxon in taxons){
     data_name <- get(paste0("rawdata_",run,"_",taxon))
@@ -44,7 +44,7 @@ for (run in runs) {
   }
   rm(run, taxon)
 }
-###################################################################### ORDENANDO DATAFRAMES ######################################################################
+###################################################################### ORDERING DATAFRAMES ######################################################################
 for (run in runs) {
   for (taxon in taxons){
     data_name <- get(paste0("rawdata_",run,"_",taxon))
@@ -54,7 +54,7 @@ for (run in runs) {
   }
   rm(run, taxon)
 }
-###################################################################### Limpando dados --> Convertendo NAs ######################################################################
+###################################################################### Cleaning Data --> Converting NAs ######################################################################
 for (run in runs) {
   for (taxon in taxons){
     data_name <- get(paste0("order_",run,"_",taxon))
@@ -64,9 +64,9 @@ for (run in runs) {
   }
   rm(run,taxon)
 }
-###################################################################### RESGATANDO FREQUENTES ######################################################################
+###################################################################### RECOVERING FREQUENT ######################################################################
 
-############################## Resgatando os 11 mais frequentes (incluindo os indefinidos) ##############################
+############################## Retrieving the 11 most frequent (including the undefined) ##############################
 for (run in runs) {
   for (taxon in taxons){
     data_name <- get(paste0("order_",run,"_",taxon))
@@ -76,7 +76,7 @@ for (run in runs) {
   }
   rm(run, taxon)
 }
-############################## Resgatando os 10 mais frequentes (excluindo os indefinidos) ##############################
+############################## Retrieving the 10 most frequent (excluding the undefined) ##############################
 ### FOR NA
 for (run in runs) {
   for (taxon in taxons){
@@ -88,7 +88,7 @@ for (run in runs) {
   }
   rm(run, taxon)
 }
-###################################################################### JUNTANDO DATAFRAMES ######################################################################
+###################################################################### JOINING DATAFRAMES ######################################################################
 
 list_kingdom <- list(final_ERR594324_kingdom,final_ERR598972_kingdom,final_ERR599023_kingdom,final_ERR599025_kingdom,final_ERR594385_kingdom,final_ERR599021_kingdom,final_ERR599164_kingdom,final_ERR598970_kingdom,
                      final_ERR599088_kingdom,final_ERR599150_kingdom,final_ERR594392_kingdom,final_ERR594291_kingdom,final_ERR598990_kingdom,final_ERR599018_kingdom,final_ERR599110_kingdom,final_ERR594382_kingdom,
@@ -173,7 +173,7 @@ for (run in runs) {
   rm(run, taxon)
 }  
 
-###################################################################### RENOMEANDO COLUNAS ######################################################################
+###################################################################### RENAMING COLUMNS ######################################################################
 
 ### KINGDOM
 names(data_final_kingdom)[1:152] <- c("kingdom_ERR594324", "n", "kingdom_ERR598972", "n", "kingdom_ERR599023", "n", "kingdom_ERR599025", "n",
@@ -320,9 +320,9 @@ names(data_final_species)[1:152] <- c("species_ERR594324", "n", "species_ERR5989
                                       "species_ERR599093", "n", "species_ERR599120", "n", "species_ERR598961", "n", "species_ERR599086", "n",
                                       "species_ERR599077", "n", "species_ERR598957", "n", "species_ERR599072", "n", "species_ERR598954", "n")
 
-###################################################################### PLOTANDO GRAFICOS ######################################################################
+###################################################################### PLOTTING GRAPHS ######################################################################
 
-# Condições 
+# Conditions 
 for (run in runs) {
   for (taxon in taxons){
     data_name <- get(paste0("final_",run,"_",taxon))
@@ -339,7 +339,7 @@ for (run in runs) {
 
 ######################### KINGDOM ######################### 
 
-# Montando o dataset de plot
+# Assembling the plot dataset
 sample_kingdom <- c(rep("01 - DCM - T064 - 594324",3),  rep("02 - DCM - T064 - 594385",3),  rep("03 - DCM - T068 - 594415",3),  rep("04 - DCM - T065 - 594382",3),
                     rep("05 - SRF - T078 - 594411",3),  rep("06 - SRF - T065 - 594359",3),  rep("07 - SRF - T068 - 594391",3),  rep("08 - DCM - T065 - 594414",3),
                     rep("09 - SRF - T065 - 594320",3),  rep("10 - DCM - T065 - 594291",3),  rep("11 - SRF - T065 - 594361",3),  rep("12 - SRF - T064 - 599150",3),
@@ -402,10 +402,10 @@ value_kingdom <- c(final_ERR594324_kingdom$n,final_ERR594385_kingdom$n,final_ERR
 
 dataplot_kingdom <- data.frame(sample_kingdom, condition_kingdom, value_kingdom)
 
-# Plotando
+# Plotting
 taxo_kingdom <- ggplot(dataplot_kingdom, aes(fill=condition_kingdom, y=value_kingdom, x=sample_kingdom)) + 
   geom_bar(position="fill", stat="identity") +
-  scale_fill_manual(values = mat_pal_kgd, name  = "Domains") +
+  scale_fill_manual(values = mat_pal_kgd2, name  = "Domains") +
   labs(title = '',
        y = 'Frequency',
        x = 'Samples') +
@@ -414,7 +414,7 @@ taxo_kingdom <- ggplot(dataplot_kingdom, aes(fill=condition_kingdom, y=value_kin
         legend.position = "none")
 taxo_kingdom
 
-# Plotando
+# Plotting (with subtitles)
 ggplot(dataplot_kingdom, aes(fill=condition_kingdom, y=value_kingdom, x=sample_kingdom)) + 
   geom_bar(position="fill", stat="identity") +
   scale_fill_manual(values = mat_pal_kgd, name  = "Domains") +
@@ -427,7 +427,7 @@ ggplot(dataplot_kingdom, aes(fill=condition_kingdom, y=value_kingdom, x=sample_k
 
 ######################### PHYLUM ######################### 
 
-# Montando o dataset de plot
+# Assembling the plot dataset
 sample_phylum <- c(rep("01 - DCM - T064 - 594324",10),  rep("02 - DCM - T064 - 594385",10),  rep("03 - DCM - T068 - 594415",10),  rep("04 - DCM - T065 - 594382",10),
                    rep("05 - SRF - T078 - 594411",10),  rep("06 - SRF - T065 - 594359",10),  rep("07 - SRF - T068 - 594391",10),  rep("08 - DCM - T065 - 594414",10),
                    rep("09 - SRF - T065 - 594320",10),  rep("10 - DCM - T065 - 594291",10),  rep("11 - SRF - T065 - 594361",10),  rep("12 - SRF - T064 - 599150",10),
@@ -491,7 +491,7 @@ value_phylum <- c(final_ERR594324_phylum$n,final_ERR594385_phylum$n,final_ERR594
 dataplot_phylum <- data.frame(sample_phylum, condition_phylum, value_phylum)
 
 
-# Plotando
+# Plotting
 taxo_phylum <- ggplot(dataplot_phylum, aes(fill=condition_phylum, y=value_phylum, x=sample_phylum)) + 
   geom_bar(position="fill", stat="identity") +
   scale_fill_manual(values = mat_pal, name  = "Phyla") +
@@ -506,7 +506,7 @@ taxo_phylum
 
 ######################### CLASS ######################### 
 
-# Montando o dataset de plot
+# Assembling the plot dataset
 sample_class <- c(rep("01 - DCM - T064 - 594324",10),  rep("02 - DCM - T064 - 594385",10),  rep("03 - DCM - T068 - 594415",10),  rep("04 - DCM - T065 - 594382",10),
                   rep("05 - SRF - T078 - 594411",10),  rep("06 - SRF - T065 - 594359",10),  rep("07 - SRF - T068 - 594391",10),  rep("08 - DCM - T065 - 594414",10),
                   rep("09 - SRF - T065 - 594320",10),  rep("10 - DCM - T065 - 594291",10),  rep("11 - SRF - T065 - 594361",10),  rep("12 - SRF - T064 - 599150",10),
@@ -570,7 +570,7 @@ value_class <- c(final_ERR594324_class$n,final_ERR594385_class$n,final_ERR594415
 dataplot_class <- data.frame(sample_class, condition_class, value_class)
 
 
-# Plotando
+# Plotting
 taxo_class <- ggplot(dataplot_class, aes(fill=condition_class, y=value_class, x=sample_class)) + 
   geom_bar(position="fill", stat="identity") +
   scale_fill_manual(values = mat_pal, name  = "Classes") +
@@ -585,7 +585,7 @@ taxo_class
 
 ######################### ORDER ######################### 
 
-# Montando o dataset de plot
+# Assembling the plot dataset
 sample_order <- c(rep("01 - DCM - T064 - 594324",10),  rep("02 - DCM - T064 - 594385",10),  rep("03 - DCM - T068 - 594415",10),  rep("04 - DCM - T065 - 594382",10),
                   rep("05 - SRF - T078 - 594411",10),  rep("06 - SRF - T065 - 594359",10),  rep("07 - SRF - T068 - 594391",10),  rep("08 - DCM - T065 - 594414",10),
                   rep("09 - SRF - T065 - 594320",10),  rep("10 - DCM - T065 - 594291",10),  rep("11 - SRF - T065 - 594361",10),  rep("12 - SRF - T064 - 599150",10),
@@ -650,7 +650,7 @@ value_order <- c(final_ERR594324_order$n,final_ERR594385_order$n,final_ERR594415
 dataplot_order <- data.frame(sample_order, condition_order, value_order)
 
 
-# Plotando
+# Plotting
 taxo_order <- ggplot(dataplot_order, aes(fill=condition_order, y=value_order, x=sample_order)) + 
   geom_bar(position="fill", stat="identity") +
   scale_fill_manual(values = mat_pal, name  = "Ordens") +
@@ -665,7 +665,7 @@ taxo_order
 
 ######################### FAMILY ######################### 
 
-# Montando o dataset de plot
+# Assembling the plot dataset
 sample_family <- c(rep("01 - DCM - T064 - 594324",10),  rep("02 - DCM - T064 - 594385",10),  rep("03 - DCM - T068 - 594415",10),  rep("04 - DCM - T065 - 594382",10),
                    rep("05 - SRF - T078 - 594411",10),  rep("06 - SRF - T065 - 594359",10),  rep("07 - SRF - T068 - 594391",10),  rep("08 - DCM - T065 - 594414",10),
                    rep("09 - SRF - T065 - 594320",10),  rep("10 - DCM - T065 - 594291",10),  rep("11 - SRF - T065 - 594361",10),  rep("12 - SRF - T064 - 599150",10),
@@ -729,7 +729,7 @@ value_family <- c(final_ERR594324_family$n,final_ERR594385_family$n,final_ERR594
 
 dataplot_family <- data.frame(sample_family, condition_family, value_family)
 
-# Plotando
+# Plotting
 taxo_family <- ggplot(dataplot_family, aes(fill=condition_family, y=value_family, x=sample_family)) + 
   geom_bar(position="fill", stat="identity") +
   scale_fill_manual(values = mat_pal, name  = "Famílias") +
@@ -744,7 +744,7 @@ taxo_family
 
 ######################### GENUS ######################### 
 
-# Montando o dataset de plot
+# Assembling the plot dataset
 sample_genus <- c(rep("01 - DCM - T064 - 594324",10),  rep("02 - DCM - T064 - 594385",10),  rep("03 - DCM - T068 - 594415",10),  rep("04 - DCM - T065 - 594382",10),
                   rep("05 - SRF - T078 - 594411",10),  rep("06 - SRF - T065 - 594359",10),  rep("07 - SRF - T068 - 594391",10),  rep("08 - DCM - T065 - 594414",10),
                   rep("09 - SRF - T065 - 594320",10),  rep("10 - DCM - T065 - 594291",10),  rep("11 - SRF - T065 - 594361",10),  rep("12 - SRF - T064 - 599150",10),
@@ -808,7 +808,7 @@ value_genus <- c(final_ERR594324_genus$n,final_ERR594385_genus$n,final_ERR594415
 dataplot_genus <- data.frame(sample_genus, condition_genus, value_genus)
 
 
-# Plotando
+# Plotting
 taxo_genus <- ggplot(dataplot_genus, aes(fill=condition_genus, y=value_genus, x=sample_genus)) + 
   geom_bar(position="fill", stat="identity") +
   scale_fill_manual(values = mat_pal3, name  = "Genera") +
@@ -823,7 +823,7 @@ taxo_genus
 
 ######################### SPECIES ######################### 
 
-# Montando o dataset de plot
+# Assembling the plot dataset
 sample_species <- c(rep("01 - DCM - T064 - 594324",10),  rep("02 - DCM - T064 - 594385",10),  rep("03 - DCM - T068 - 594415",10),  rep("04 - DCM - T065 - 594382",10),
                     rep("05 - SRF - T078 - 594411",10),  rep("06 - SRF - T065 - 594359",10),  rep("07 - SRF - T068 - 594391",10),  rep("08 - DCM - T065 - 594414",10),
                     rep("09 - SRF - T065 - 594320",10),  rep("10 - DCM - T065 - 594291",10),  rep("11 - SRF - T065 - 594361",10),  rep("12 - SRF - T064 - 599150",10),
@@ -887,7 +887,7 @@ value_species <- c(final_ERR594324_species$n,final_ERR594385_species$n,final_ERR
 dataplot_species <- data.frame(sample_species, condition_species, value_species)
 
 
-# Plotando
+# Plotting
 taxo_species <- ggplot(dataplot_species, aes(fill=condition_species, y=value_species, x=sample_species)) + 
   geom_bar(position="fill", stat="identity") +
   scale_fill_manual(values = mat_pal3, name  = "Species") +
@@ -899,6 +899,7 @@ taxo_species <- ggplot(dataplot_species, aes(fill=condition_species, y=value_spe
         legend.position = "none")
 taxo_species
 
+# Plotting (with subtitles)
 ggplot(dataplot_species, aes(fill=condition_species, y=value_species, x=sample_species)) + 
   geom_bar(position="fill", stat="identity") +
   scale_fill_manual(values = mat_pal3, name  = "Species") +
@@ -908,7 +909,10 @@ ggplot(dataplot_species, aes(fill=condition_species, y=value_species, x=sample_s
   theme(plot.title = element_text(hjust = 0.5),
         axis.text.x = element_text(vjust=0.6, angle=90))
 
-### Salvando imagens (PDF)
+###################################################################### EXPORTING FILES ######################################################################
+
+
+### exporting files (PDF)
 for (taxon in taxons){
   data_name <- get(paste0("taxo_",taxon))
   vari_name <- paste0("~/meta_taraocean/data/results/output/taxonomic/plots/pdf/taxo_",taxon,".pdf")
@@ -917,7 +921,7 @@ for (taxon in taxons){
   rm(data_name, vari_name, taxon)
 }
 
-### Salvando imagens (PNG)
+### exporting files (PNG)
 for (taxon in taxons){
   data_name <- get(paste0("taxo_",taxon))
   vari_name <- paste0("~/meta_taraocean/data/results/output/taxonomic/plots/png/taxo_",taxon,".png")
@@ -926,7 +930,7 @@ for (taxon in taxons){
   rm(data_name, vari_name, taxon)
 }
 
-### Salvando imagens (SVG)
+### exporting files (SVG)
 # for (taxon in taxons){
 #   vari_name <- paste0("~/meta_taraocean/data/results/output/taxonomic/plots/svg/taxo_",taxon,".svg")
 #   data_name <- get(paste0("taxo_",taxon))
@@ -963,7 +967,8 @@ taxo_species
 dev.copy(svg, paste0("~/meta_taraocean/data/results/output/taxonomic/plots/svg/taxo_species.svg"), width = 7, height = 5)
 dev.off()
 
-###Paletas
+
+###################################################################### PALETTES ######################################################################
 
 stg_colors <- c("#E6E8FA", "#FFCCCC", "#FFCC99", "#FFFFCC", "#CCCCCC", "#FF6666", "#FFCC33", "#FFFF99", "#C0C0C0", "#FF0000",
                 "#FF9900", "#FFFF00", "#999999", "#CC0000", "#FF6600", "#FFCC00", "#666666", "#990000", "#CC6600", "#999900",

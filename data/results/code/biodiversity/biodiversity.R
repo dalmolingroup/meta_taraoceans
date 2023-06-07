@@ -1,24 +1,24 @@
-##############################################################################################################
-##################################### PREPARACAO DO AMBIENTE DE TRABALHO #####################################
-##############################################################################################################
+########################################################################################################
+##################################### work environment preparation #####################################
+########################################################################################################
 
-##### INSTALANDO DE PACOTES
+### installing necessary packages to fulfill the requirements and requests of this work
 # install.packages('dplyr'); install.packages('tidyr'); install.packages("pals"); install.packages("plyr"); 
 # install.packages("FactoMineR"); install.packages("ggplot2"); install.packages("ggdendro"); install.packages("xlsx");
 # install.packages("cluster"); install.packages("devtools"); install.packages("factoextra"); install.packages("stats");
 # install.packages("dendextend"); install.packages("MultivariateAnalysis"); install.packages("vegan"); # install.packages("patchwork")
 
-##### CARREGANDO PACOTES
+### loading the libraries
 library(dplyr); library(tidyr); library(pals); library(plyr); library(FactoMineR); library(ggplot2);
 library(ggdendro); library(cluster); library(factoextra); library(stats); #library(devtools);
 library(dendextend); library(MultivariateAnalysis); library(vegan); library(ggpubr); library(vegan);
 library(tidyverse); library(forcats); library(iNEXT); library(scales); library(patchwork)
 
-##############################################################################################################
-########################################### DEFINICAO DE VARIAVEIS ###########################################
-##############################################################################################################
+##########################################################################################################
+########################################### DEFINING VARIABLES ###########################################
+##########################################################################################################
 
-##### DEFININDO VARIAVEIS
+##### DEFINING VARIABLES
 path="~/meta_taraocean/data/results/input/taxonomic/"
 taxons <- c("kingdom", "phylum", "class", "order", "family", "genus", "species")
 runs <- c("ERR594324","ERR598972","ERR599023","ERR599025","ERR594385","ERR599021","ERR599164","ERR598970",
@@ -166,11 +166,11 @@ distances <- c("euclidean", "minkowski", "canberra")
 methods <- c("single","complete","ward.D2","average")
 comp_depths <- list( c("SRF", "DCM"), c("SRF", "MES"), c("DCM", "MES"))
 
-##############################################################################################################
-############################################ PREPARACAO DOS DADOS ############################################
-##############################################################################################################
+############################################################################################################
+############################################ PREPARING THE DATA ############################################
+############################################################################################################
 
-##### Resgatando amostras
+##### Retrieving samples
 for (run in runs) {
   for (taxon in taxons){
     file_name <- paste0(path,taxon,"_",run,"_names.txt")
@@ -181,7 +181,7 @@ for (run in runs) {
   rm(run, taxon)
 }
 
-##### Renomeando colunas
+##### Renaming columns
 for (run in runs) {
   for (taxon in taxons){
     data_name <- get(paste0("cluster_",run,"_",taxon))
@@ -192,7 +192,7 @@ for (run in runs) {
   rm(run, taxon)
 }
 
-##### Ordenando dataframes
+##### Ordering dataframes
 for (run in runs) {
   for (taxon in taxons){
     data_name <- get(paste0("cluster_",run,"_",taxon))
@@ -203,7 +203,7 @@ for (run in runs) {
   rm(run, taxon)
 }
 
-##### Convertendo NAs
+##### Converting NAs
 for (run in runs) {
   for (taxon in taxons){
     data_name <- get(paste0("cluster_",run,"_",taxon))
@@ -214,7 +214,7 @@ for (run in runs) {
   rm(run,taxon)
 }
 
-##### Excluindo os indefinidos
+##### Excluding undefined
 for (run in runs) {
   for (taxon in taxons){
     data_name <- get(paste0("cluster_",run,"_",taxon))
@@ -226,7 +226,7 @@ for (run in runs) {
   rm(run, taxon)
 }
 
-##### Transpondo os dataframes
+##### Transposing dataframes
 for (run in runs) {
   for (taxon in taxons){
     data_name <- get(paste0("cluster_",run,"_",taxon))
@@ -237,7 +237,7 @@ for (run in runs) {
   rm(run, taxon)
 }
 
-##### Resgatando os nomes para as colunas
+##### Retrieving the names for the columns
 for (run in runs) {
   for (taxon in taxons){
     data_name <- get(paste0("cluster_",run,"_",taxon))
@@ -248,7 +248,7 @@ for (run in runs) {
   rm(run, taxon)
 }
 
-##### Renomeando colunas
+##### Renaming columns
 for (run in runs) {
   for (taxon in taxons){
     data_name1 <- get(paste0("trans_",run,"_",taxon))
@@ -260,7 +260,7 @@ for (run in runs) {
   rm(run, taxon)
 }
 
-##### Removendo a linha com os nomes das colunas
+##### Removing the line with the column names
 for (run in runs) {
   for (taxon in taxons){
     data_name <- get(paste0("trans_",run,"_",taxon))
@@ -272,7 +272,7 @@ for (run in runs) {
   rm(run, taxon)
 }
 
-##### Criando os dataframes com todas as amostras em cada taxon
+##### Creating dataframes with all samples in each taxon
 data_kingdom <- rbind.fill(trans_ERR594324_kingdom,trans_ERR598972_kingdom,trans_ERR599023_kingdom,trans_ERR599025_kingdom,trans_ERR594385_kingdom,trans_ERR599021_kingdom,trans_ERR599164_kingdom,trans_ERR598970_kingdom,
                            trans_ERR599088_kingdom,trans_ERR599150_kingdom,trans_ERR594392_kingdom,trans_ERR594291_kingdom,trans_ERR598990_kingdom,trans_ERR599018_kingdom,trans_ERR599110_kingdom,trans_ERR594382_kingdom,
                            trans_ERR594414_kingdom,trans_ERR598960_kingdom,trans_ERR599034_kingdom,trans_ERR594320_kingdom,trans_ERR598979_kingdom,trans_ERR599146_kingdom,trans_ERR594359_kingdom,trans_ERR594361_kingdom,
@@ -344,7 +344,7 @@ data_species <- rbind.fill(trans_ERR594324_species,trans_ERR598972_species,trans
                            trans_ERR599042_species,trans_ERR599079_species,trans_ERR599071_species,trans_ERR599085_species,trans_ERR599093_species,trans_ERR599120_species,trans_ERR598961_species,trans_ERR599086_species,
                            trans_ERR599077_species,trans_ERR598957_species,trans_ERR599072_species,trans_ERR598954_species)
 
-##### Renomeando linhas com os nomes das amostras
+##### Renaming lines with sample names
 for (taxon in taxons){
   data_name <- get(paste0("data_",taxon))
   row.names(data_name) <- names_runs
@@ -352,7 +352,7 @@ for (taxon in taxons){
   rm(data_name, taxon)
 }
 
-##### Convertendo NAs em valores nulos
+##### Converting NAs to null values
 for (taxon in taxons){
   data_name <- get(paste0("data_",taxon))
   data_name[is.na(data_name)] <- 0
@@ -360,27 +360,27 @@ for (taxon in taxons){
   rm(data_name, taxon)
 }
 
-##### Convertendo os dataframes de char para numeric
+##### Converting dataframes from char to numeric
 for (taxon in taxons){
   data_name <- get(paste0("data_",taxon))
   assign(paste0("data_",taxon), data_name %>% mutate_at(c(1:length(data_name)), as.numeric))
   rm(data_name, taxon)
 }
 
-################################################################################################################################################################################
-####################################################################### CALCULO DA DIVERSIDADE BIOLOGICA #######################################################################
-################################################################################################################################################################################
+###################################################################################################################################################################################
+####################################################################### CALCULATION OF BIOLOGICAL DIVERSITY #######################################################################
+###################################################################################################################################################################################
 
-##### Criando os indices de diversidade biologica
+##### Creating biological diversity indices
 
-##### Indice de Shannon
+##### Shannon Index
 for (taxon in taxons){
   data_name <- get(paste0("data_",taxon))
   assign(paste0("shannon_",taxon), diversity(data_name))
   rm(data_name, taxon)
 }
 
-##### Indice de Shannon Normalizada
+##### Shannon Index Normalized
 for (taxon in taxons){
   data_name1 <- get(paste0("shannon_",taxon))
   data_name2 <- get(paste0("data_",taxon))
@@ -388,7 +388,7 @@ for (taxon in taxons){
   rm(data_name1, data_name2, taxon)
 }
 
-##### Equitabilidade de Pielou
+##### Pielou's Equitability
 for (taxon in taxons){
   data_name1 <- get(paste0("shannon_",taxon))
   data_name2 <- get(paste0("data_",taxon))
@@ -396,7 +396,7 @@ for (taxon in taxons){
   rm(data_name1, data_name2, taxon)
 }
 
-##### Criando os dataframes de diversidade biologica
+##### Creating the biological diversity dataframes
 for (taxon in taxons){
   for(index in indexes){
     data_name <- get(paste0(index,"_",taxon))
@@ -406,7 +406,7 @@ for (taxon in taxons){
   rm(data_name, vari_name, taxon, index)
 }
 
-### Renomeando coluna de dados
+### Renaming data column
 for (taxon in taxons){
   for(index in indexes){
     data_name <- get(paste0("data_",index,"_",taxon))
@@ -416,7 +416,7 @@ for (taxon in taxons){
   rm(data_name, taxon, index)
 }
 
-##### Testando a normalidade dos indices
+##### Testing the normality of the indices
 
 ### Shannon
 shannon_kingdom; order(shannon_kingdom); shannon_kingdom[order(shannon_kingdom)]; hist(shannon_kingdom)
@@ -427,7 +427,7 @@ shannon_family; order(shannon_family); shannon_family[order(shannon_family)]; hi
 shannon_genus; order(shannon_genus); shannon_genus[order(shannon_genus)]; hist(shannon_genus)
 shannon_species; order(shannon_species); shannon_species[order(shannon_species)]; hist(shannon_species)
 
-### Shannon Normalizada
+### Shannon Normalized
 shannon.norm_kingdom; order(shannon.norm_kingdom); shannon.norm_kingdom[order(shannon.norm_kingdom)]; hist(shannon.norm_kingdom)
 shannon.norm_phylum; order(shannon.norm_phylum); shannon.norm_phylum[order(shannon.norm_phylum)]; hist(shannon.norm_phylum)
 shannon.norm_class; order(shannon.norm_class); shannon.norm_class[order(shannon.norm_class)]; hist(shannon.norm_class)
@@ -445,13 +445,13 @@ pielou_family; order(pielou_family); pielou_family[order(pielou_family)]; hist(p
 pielou_genus; order(pielou_genus); pielou_genus[order(pielou_genus)]; hist(pielou_genus)
 pielou_species; order(pielou_species); pielou_species[order(pielou_species)]; hist(pielou_species)
 
-################################################################################################################################################################################
-############################################################################ AGRUPAMENTO DOS DADOS #############################################################################
-################################################################################################################################################################################
+########################################################################################################################################################################
+############################################################################ DATA GROUPING #############################################################################
+########################################################################################################################################################################
 
-##### Clusterizacao 1: Pacote static
+##### Clustering 1: Static package
 
-### Matrizes de distancia
+### Distance matrices
 for (taxon in taxons){
   for(index in indexes){
     for(distance in distances){
@@ -463,7 +463,7 @@ for (taxon in taxons){
   rm(data_name, vari_name, taxon, index, distance)
 }
 
-### Metodos de agrupamento
+### Grouping methods
 for (taxon in taxons){
   for(index in indexes){
     for(distance in distances){
@@ -477,7 +477,7 @@ for (taxon in taxons){
   rm(data_name, vari_name, taxon, index, distance, method)
 }
 
-### Dendrogramas
+### Dendrograms
 for (taxon in taxons){
   for(index in indexes){
     for(distance in distances){
@@ -492,9 +492,9 @@ for (taxon in taxons){
 }
 
 
-##### Clusterizacao 2: Pacote MultivariateAnalysis
+##### Clustering 2: MultivariateAnalysis Package
 
-### Matriz de Distancia (MA) - Euclidiana - Shannon e Pielou
+### Distance Matrix (MA) - Euclidean, Shannon and Pielou
 for (taxon in taxons){
   for( index in indexes){
     data_name <- get(paste0("data_",index,"_",taxon))
@@ -504,7 +504,7 @@ for (taxon in taxons){
   rm(data_name, vari_name, taxon, index)
 }
 
-### Dados e impressao simplificada dos agrupamentos - Shannon
+### Data and simplified printing of clusters - Shannon
 Dendrograma(Dissimilaridade = ma_dist.euclidean_shannon_kingdom, Metodo = 3)
 Dendrograma(Dissimilaridade = ma_dist.euclidean_shannon_phylum, Metodo = 3)
 Dendrograma(Dissimilaridade = ma_dist.euclidean_shannon_class, Metodo = 3)
@@ -513,7 +513,7 @@ Dendrograma(Dissimilaridade = ma_dist.euclidean_shannon_family, Metodo = 3)
 Dendrograma(Dissimilaridade = ma_dist.euclidean_shannon_genus, Metodo = 3)
 Dendrograma(Dissimilaridade = ma_dist.euclidean_shannon_species, Metodo = 3)
 
-### Dados e impressao simplificada dos agrupamentos - Shannon Normalizada
+### Data and simplified printing of clusters - Shannon Normalized
 Dendrograma(Dissimilaridade = ma_dist.euclidean_shannon.norm_kingdom, Metodo = 3)
 Dendrograma(Dissimilaridade = ma_dist.euclidean_shannon.norm_phylum, Metodo = 3)
 Dendrograma(Dissimilaridade = ma_dist.euclidean_shannon.norm_class, Metodo = 3)
@@ -522,7 +522,7 @@ Dendrograma(Dissimilaridade = ma_dist.euclidean_shannon.norm_family, Metodo = 3)
 Dendrograma(Dissimilaridade = ma_dist.euclidean_shannon.norm_genus, Metodo = 3)
 Dendrograma(Dissimilaridade = ma_dist.euclidean_shannon.norm_species, Metodo = 3)
 
-### Dados e impressao simplificada dos agrupamentos - Pielou
+### Data and simplified printing of clusters - Pielou
 Dendrograma(Dissimilaridade = ma_dist.euclidean_pielou_kingdom, Metodo = 3)
 Dendrograma(Dissimilaridade = ma_dist.euclidean_pielou_phylum, Metodo = 3)
 Dendrograma(Dissimilaridade = ma_dist.euclidean_pielou_class, Metodo = 3)
@@ -531,11 +531,11 @@ Dendrograma(Dissimilaridade = ma_dist.euclidean_pielou_family, Metodo = 3)
 Dendrograma(Dissimilaridade = ma_dist.euclidean_pielou_genus, Metodo = 3)
 Dendrograma(Dissimilaridade = ma_dist.euclidean_pielou_species, Metodo = 3)
 
-################################################################################################################################################################################
-############################################################################ MONTAGEM DOS GRAFICOS #############################################################################
-################################################################################################################################################################################
+###############################################################################################################################################################################
+############################################################################ ASSEMBLY OF GRAPHICS #############################################################################
+###############################################################################################################################################################################
 
-##### Configurando as Figuras (Shannon Normalizada)
+##### Configuring the Figures (Normalized Shannon)
 ngroups_kingdom <- 6; hgroups_kingdom <- 0.09368541;
 ngroups_phylum <- 7; hgroups_phylum <- 0.02016725;
 ngroups_class <- 7; hgroups_class <- 0.02249256;
@@ -548,7 +548,7 @@ mycolors <- c("#D32F2F", "#7B1FA2", "#303F9F", "#00796B", "#FFA000",
               "#F06292", "#E040FB", "#40C4FF", "#00E676", "#FFD600")
 mycolors.black <- c(rep("black",8))
 
-##### Dendrograma
+##### Dendrogram
 for (taxon in taxons){
   for(index in indexes){
     for(distance in distances){
@@ -559,12 +559,12 @@ for (taxon in taxons){
           data_name, 
           # k = get(paste0("ngroups_",taxon)),
           h = get(paste0("hgroups_",taxon)),
-          color_labels_by_k = FALSE, # Define cores no label dos grupos
-          cex = 0.4,                 # Define o tamanho do label
-          lwd = 0.4,                 # Define a largura das barras
-          rect = TRUE,               # Adiciona retangulos no entorno dos grupos
+          color_labels_by_k = FALSE, # 
+          cex = 0.4,                 
+          lwd = 0.4,                 
+          rect = TRUE,               
           lower_rect = 0,
-          k_colors = mycolors.black,       # Define a paleta de cores
+          k_colors = mycolors.black,       
           horiz = FALSE,
           # main = paste0("Dendrogram - Method: Average (UPGMA), Taxon: ", toupper(taxon)),
           xlab = "Samples",
@@ -586,7 +586,10 @@ dend_average_euclidean_shannon.norm_family
 dend_average_euclidean_shannon.norm_genus
 dend_average_euclidean_shannon.norm_species
 
-### Salvando imagens (PDF)
+
+############################################################################ EXPORTING FILES #############################################################################
+
+### exporting files (PDF)
 for (taxon in taxons){
   for(index in indexes){
     for(distance in distances) {
@@ -601,7 +604,7 @@ for (taxon in taxons){
   rm(data_name, vari_name, distance, method, index, taxon)
 }
 
-### Salvando imagens (PNG)
+### exporting files (PNG)
 for (taxon in taxons){
   for(index in indexes){
     for(distance in distances) {
@@ -616,7 +619,7 @@ for (taxon in taxons){
   rm(data_name, vari_name, distance, method, index, taxon)
 }
 
-### Salvando imagens (SVG)
+### exporting files (SVG)
 for (taxon in taxons){
   for(index in indexes){
     for(distance in distances) {
@@ -630,11 +633,11 @@ for (taxon in taxons){
   }
   rm(data_name, vari_name, distance, method, index, taxon)
 }
-################################################################################################################################################################################
-############################################################################ MEDIDAS DE DIVERSIDADE ############################################################################
-################################################################################################################################################################################
+############################################################################################################################################################################
+############################################################################ DIVERSITY MEASURES ############################################################################
+############################################################################################################################################################################
 
-##### Resgatando os dados originais
+##### Retrieving the original data
 for (taxon in taxons){
   for(index in indexes){
     data_name <- get(paste0("data_",index,"_",taxon))
@@ -644,7 +647,7 @@ for (taxon in taxons){
   rm(data_name, vari_name, taxon, index)
 }
 
-##### Adicionando colunas de dados
+##### Adding data columns
 for (taxon in taxons){
   for(index in indexes){
     data_name1 <- get(paste0("data_",taxon))
@@ -663,29 +666,29 @@ for (taxon in taxons){
 ################################################################################
 ################################################################################
 
-#### Grafico de Dispersao - Diversidade x Abundancia
+#### Scatter Chart - Diversity x Abundance
 
 for (taxon in taxons){
   for(index in indexes){
     data_name <- get(paste0("complete_",index,"_",taxon))
     vari_name <- paste0("stac.dvst.abdc_",index,"_",taxon)
     assign(vari_name, ggplot(data_name, aes(x = log10(abund), y = diversity_index)) +
-       # geom_jitter(aes(color = factor(depths, levels = c("SRF","DCM","MES")), 
-       #                 shape = shapes), position=position_jitter(width=.1), size = 3.5) + # COM FORMAS
-       geom_jitter(aes(color = factor(depths, levels = c("SRF","DCM","MES"))),
-                   position=position_jitter(width=.1), size = 2) + # SEM FORMAS
-       # geom_hline(yintercept = 0.5) +
-       # geom_vline(xintercept = max(data_name$abund)/2) +
-       scale_color_manual(labels = c("SRF", "DCM", "MES"),
-                          values = c("#303F9F","#D32F2F","#FFA000")) +
-       scale_shape_manual(labels = c("064","065","068","076","078","098","111","112"),
-                          values = c(0,1,2,3,4,5,7,9)) +
-       # scale_x_log10(labels = comma_format(big.mark = ".", decimal.mark = ",")) +
-       # scale_y_log10(labels = comma_format(big.mark = ".", decimal.mark = ",")) +
-       scale_x_continuous(labels = comma_format(big.mark = ".", decimal.mark = ",")) +
-       scale_y_continuous(limits = c(0, 1)) +
-       labs(color = "Layers", shape = "Shapes", y = "Diversity", x = "log10(Abundance)") +
-       theme(axis.text.x = element_text(angle = 90,hjust = 1,face = "italic"))
+             # geom_jitter(aes(color = factor(depths, levels = c("SRF","DCM","MES")), 
+             #                 shape = shapes), position=position_jitter(width=.1), size = 3.5) + # COM FORMAS
+             geom_jitter(aes(color = factor(depths, levels = c("SRF","DCM","MES"))),
+                         position=position_jitter(width=.1), size = 2) + # SEM FORMAS
+             # geom_hline(yintercept = 0.5) +
+             # geom_vline(xintercept = max(data_name$abund)/2) +
+             scale_color_manual(labels = c("SRF", "DCM", "MES"),
+                                values = c("#303F9F","#D32F2F","#FFA000")) +
+             scale_shape_manual(labels = c("064","065","068","076","078","098","111","112"),
+                                values = c(0,1,2,3,4,5,7,9)) +
+             # scale_x_log10(labels = comma_format(big.mark = ".", decimal.mark = ",")) +
+             # scale_y_log10(labels = comma_format(big.mark = ".", decimal.mark = ",")) +
+             scale_x_continuous(labels = comma_format(big.mark = ".", decimal.mark = ",")) +
+             scale_y_continuous(limits = c(0, 1)) +
+             labs(color = "Layers", shape = "Shapes", y = "Diversity", x = "log10(Abundance)") +
+             theme(axis.text.x = element_text(angle = 90,hjust = 1,face = "italic"))
     )
   }
   rm(data_name, vari_name, index, taxon)
@@ -699,7 +702,9 @@ stac.dvst.abdc_shannon.norm_family + theme_light()
 stac.dvst.abdc_shannon.norm_genus + theme_light()
 stac.dvst.abdc_shannon.norm_species + theme_light()
 
-### Salvando imagens (PDF)
+############################################################################ EXPORTING FILES #############################################################################
+
+### exporting files (PDF)
 for (taxon in taxons){
   for(index in indexes){
     data_name <- get(paste0("stac.dvst.abdc_",index,"_",taxon))
@@ -710,7 +715,7 @@ for (taxon in taxons){
   rm(data_name, vari_name, index, taxon)
 }
 
-### Salvando imagens (PNG)
+### exporting files (PNG)
 for (taxon in taxons){
   for(index in indexes){
     data_name <- get(paste0("stac.dvst.abdc_",index,"_",taxon))
@@ -721,7 +726,7 @@ for (taxon in taxons){
   rm(data_name, vari_name, index, taxon)
 }
 
-### Salvando imagens (SVG)
+### exporting files (SVG)
 for (taxon in taxons){
   for(index in indexes){
     data_name <- get(paste0("stac.dvst.abdc_",index,"_",taxon))
@@ -733,29 +738,29 @@ for (taxon in taxons){
 }
 
 
-##### Grafico de Dispersao - Diversidade x Estacoes
+##### Scatter Chart - Diversity x Stations
 
 for (taxon in taxons){
   for(index in indexes){
     data_name <- get(paste0("complete_",index,"_",taxon))
     vari_name <- paste0("stac.dvst.stt","_",index,"_",taxon)
     assign(vari_name, ggplot(data_name, aes(x = stations, y = diversity_index)) +
-       # geom_jitter(aes(color = factor(depths, levels = c("SRF","DCM","MES")), 
-       #                 shape = shapes), position=position_jitter(width=.1), size = 3.5) + # COM FORMAS
-       geom_jitter(aes(color = factor(depths, levels = c("SRF","DCM","MES"))),
-                   position=position_jitter(width=.1), size = 2) + # SEM FORMAS
-       # geom_hline(yintercept = 0.50) +
-       # geom_vline(xintercept = 4.5) +
-       scale_color_manual(labels = c("SRF", "DCM", "MES"),
-                          values = c("#303F9F","#D32F2F","#FFA000")) +
-       scale_shape_manual(labels = c("064","065","068","076","078","098","111","112"),
-                          values = c(0,1,2,3,4,5,7,9)) +
-       # scale_x_log10(labels = comma_format(big.mark = ".", decimal.mark = ",")) +
-       # scale_y_log10(labels = comma_format(big.mark = ".", decimal.mark = ",")) +
-       # scale_x_continuous(labels = comma_format(big.mark = ".", decimal.mark = ",")) +
-       scale_y_continuous(limits = c(0, 1)) +
-       labs(color = "Layers", shape = "Shapes",  y = "Diversity", x = "Stations") +
-       theme(axis.text.x = element_text(angle = 90,hjust = 1,face = "italic"))
+             # geom_jitter(aes(color = factor(depths, levels = c("SRF","DCM","MES")), 
+             #                 shape = shapes), position=position_jitter(width=.1), size = 3.5) + # COM FORMAS
+             geom_jitter(aes(color = factor(depths, levels = c("SRF","DCM","MES"))),
+                         position=position_jitter(width=.1), size = 2) + # SEM FORMAS
+             # geom_hline(yintercept = 0.50) +
+             # geom_vline(xintercept = 4.5) +
+             scale_color_manual(labels = c("SRF", "DCM", "MES"),
+                                values = c("#303F9F","#D32F2F","#FFA000")) +
+             scale_shape_manual(labels = c("064","065","068","076","078","098","111","112"),
+                                values = c(0,1,2,3,4,5,7,9)) +
+             # scale_x_log10(labels = comma_format(big.mark = ".", decimal.mark = ",")) +
+             # scale_y_log10(labels = comma_format(big.mark = ".", decimal.mark = ",")) +
+             # scale_x_continuous(labels = comma_format(big.mark = ".", decimal.mark = ",")) +
+             scale_y_continuous(limits = c(0, 1)) +
+             labs(color = "Layers", shape = "Shapes",  y = "Diversity", x = "Stations") +
+             theme(axis.text.x = element_text(angle = 90,hjust = 1,face = "italic"))
     )
   }
   rm(data_name, vari_name, index, taxon)
@@ -769,7 +774,9 @@ stac.dvst.stt_shannon.norm_family + theme_light()
 stac.dvst.stt_shannon.norm_genus + theme_light()
 stac.dvst.stt_shannon.norm_species + theme_light()
 
-### Salvando imagens (PDF)
+############################################################################ EXPORTING FILES #############################################################################
+
+### exporting files (PDF)
 for (taxon in taxons){
   for(index in indexes){
     data_name <- get(paste0("stac.dvst.stt_",index,"_",taxon))
@@ -780,7 +787,7 @@ for (taxon in taxons){
   rm(data_name, vari_name, index, taxon)
 }
 
-### Salvando imagens (PNG)
+### exporting files (PNG)
 for (taxon in taxons){
   for(index in indexes){
     data_name <- get(paste0("stac.dvst.stt_",index,"_",taxon))
@@ -791,7 +798,7 @@ for (taxon in taxons){
   rm(data_name, vari_name, index, taxon)
 }
 
-### Salvando imagens (SVG)
+### exporting files (SVG)
 for (taxon in taxons){
   for(index in indexes){
     data_name <- get(paste0("stac.dvst.stt_",index,"_",taxon))
@@ -803,29 +810,29 @@ for (taxon in taxons){
 }
 
 
-### Grafico de Dispersao - Abundancia x Estacoes
+### Scatter Chart - Abundance x Stations
 
 for (taxon in taxons){
   for(index in indexes){
     data_name <- get(paste0("complete_",index,"_",taxon))
     vari_name <- paste0("stac.abdc.stt","_",index,"_",taxon)
     assign(vari_name, ggplot(data_name, aes(x = stations, y = log10(abund))) +
-       # geom_jitter(aes(color = factor(depths, levels = c("SRF","DCM","MES")), 
-       #                 shape = shapes), position=position_jitter(width=.1), size = 3.5) + # COM FORMAS
-       geom_jitter(aes(color = factor(depths, levels = c("SRF","DCM","MES"))),
-                   position=position_jitter(width=.1), size = 2) + # SEM FORMAS
-       # geom_hline(yintercept = max(data_name$abund)/2) +
-       # geom_vline(xintercept = 4.5) +
-       scale_color_manual(labels = c("SRF", "DCM", "MES"),
-                          values = c("#303F9F","#D32F2F","#FFA000")) +
-       scale_shape_manual(labels = c("064","065","068","076","078","098","111","112"),
-                          values = c(0,1,2,3,4,5,7,9)) +
-       # scale_x_log10(labels = comma_format(big.mark = ".", decimal.mark = ",")) +
-       # scale_y_log10(labels = comma_format(big.mark = ".", decimal.mark = ",")) +
-       # scale_x_continuous(labels = comma_format(big.mark = ".", decimal.mark = ",")) +
-       scale_y_continuous(labels = comma_format(big.mark = ".", decimal.mark = ",")) +
-       labs(color = "Layers", shape = "Shapes", y = "log10(Abundance)", x = "Stations") +
-       theme(axis.text.x = element_text(angle = 90,hjust = 1,face = "italic"))
+             # geom_jitter(aes(color = factor(depths, levels = c("SRF","DCM","MES")), 
+             #                 shape = shapes), position=position_jitter(width=.1), size = 3.5) + # COM FORMAS
+             geom_jitter(aes(color = factor(depths, levels = c("SRF","DCM","MES"))),
+                         position=position_jitter(width=.1), size = 2) + # SEM FORMAS
+             # geom_hline(yintercept = max(data_name$abund)/2) +
+             # geom_vline(xintercept = 4.5) +
+             scale_color_manual(labels = c("SRF", "DCM", "MES"),
+                                values = c("#303F9F","#D32F2F","#FFA000")) +
+             scale_shape_manual(labels = c("064","065","068","076","078","098","111","112"),
+                                values = c(0,1,2,3,4,5,7,9)) +
+             # scale_x_log10(labels = comma_format(big.mark = ".", decimal.mark = ",")) +
+             # scale_y_log10(labels = comma_format(big.mark = ".", decimal.mark = ",")) +
+             # scale_x_continuous(labels = comma_format(big.mark = ".", decimal.mark = ",")) +
+             scale_y_continuous(labels = comma_format(big.mark = ".", decimal.mark = ",")) +
+             labs(color = "Layers", shape = "Shapes", y = "log10(Abundance)", x = "Stations") +
+             theme(axis.text.x = element_text(angle = 90,hjust = 1,face = "italic"))
     )
   }
   rm(data_name, vari_name, taxon, index)
@@ -839,7 +846,9 @@ stac.abdc.stt_shannon.norm_family + theme_light()
 stac.abdc.stt_shannon.norm_genus + theme_light()
 stac.abdc.stt_shannon.norm_species + theme_light()
 
-### Salvando imagens (PDF)
+############################################################################ EXPORTING FILES #############################################################################
+
+### exporting files (PDF)
 for (taxon in taxons){
   for(index in indexes){
     data_name <- get(paste0("stac.abdc.stt_",index,"_",taxon))
@@ -850,7 +859,7 @@ for (taxon in taxons){
   rm(data_name, vari_name, index, taxon)
 }
 
-### Salvando imagens (PNG)
+### exporting files (PNG)
 for (taxon in taxons){
   for(index in indexes){
     data_name <- get(paste0("stac.abdc.stt_",index,"_",taxon))
@@ -861,7 +870,7 @@ for (taxon in taxons){
   rm(data_name, vari_name, index, taxon)
 }
 
-### Salvando imagens (SVG)
+### exporting files (SVG)
 for (taxon in taxons){
   for(index in indexes){
     data_name <- get(paste0("stac.abdc.stt_",index,"_",taxon))
@@ -873,7 +882,7 @@ for (taxon in taxons){
 }
 
 
-##### Boxplot - Diversidade por camada
+##### Boxplot - Diversity per depth
 
 for (taxon in taxons){
   for(index in indexes){
@@ -881,31 +890,31 @@ for (taxon in taxons){
     vari_name <- paste0("box.dvst.depths","_",index,"_",taxon)
     Layers <- factor(depths, levels = c("SRF","DCM","MES"), ordered = TRUE)
     assign(vari_name, ggplot(data_name, aes(x = Layers, y = diversity_index, color = Layers)) +
-       geom_boxplot(aes(fill = Layers),outlier.shape=NA) +
-       # geom_jitter(aes(shape=shapes), position=position_jitter(width=.1, height=0), size = 2.5) + # COM FORMAS
-       geom_jitter(position=position_jitter(width=.1, height=0), size = 2) + # SEM FORMAS
-       scale_color_manual(labels = c("SRF", "DCM", "MES"),
-                          values = c("#303F9F","#D32F2F","#FFA000")) +
-       scale_fill_manual(labels = c("SRF", "DCM", "MES"),
-                         values = c("#40C4FF","#F06292","#FFD600")) +
-       scale_shape_manual(labels = c("064","065","068","076","078","098","111","112"),
-                          values = c(0,1,2,3,4,5,7,9)) +
-       # scale_x_log10(labels = comma_format(big.mark = ".", decimal.mark = ",")) +
-       # scale_y_log10(labels = comma_format(big.mark = ".", decimal.mark = ",")) +
-       # scale_x_continuous(labels = comma_format(big.mark = ".", decimal.mark = ",")) +
-       scale_y_continuous(limits = c(0, 1)) +
-       # stat_compare_means(method = "wilcox.test", comparisons = comp_depths) +
-       geom_signif(annotations = 'ns', y_position = 0.85, xmin = 1, xmax = 2, size = 0.3, textsize = 4.5, color = "black") +
-       geom_signif(annotations = '****', y_position = 0.90, xmin = 2, xmax = 3, size = 0.3, textsize = 4.5, color = "black")+
-       geom_signif(annotations = '****', y_position = 0.95, xmin = 1, xmax = 3, size = 0.3, textsize = 4.5, color = "black")+
-       labs(y = "Diversity", x = "Layers") +
-     theme(axis.text.x = element_text(angle = 90,hjust = 1,face = "italic"))
+             geom_boxplot(aes(fill = Layers),outlier.shape=NA) +
+             # geom_jitter(aes(shape=shapes), position=position_jitter(width=.1, height=0), size = 2.5) + # COM FORMAS
+             geom_jitter(position=position_jitter(width=.1, height=0), size = 2) + # SEM FORMAS
+             scale_color_manual(labels = c("SRF", "DCM", "MES"),
+                                values = c("#020202","#330000","#FF6600")) +
+             scale_fill_manual(labels = c("SRF", "DCM", "MES"),
+                               values = c("#303F9F","#D32F2F","#FFA000")) +
+             scale_shape_manual(labels = c("064","065","068","076","078","098","111","112"),
+                                values = c(0,1,2,3,4,5,7,9)) +
+             # scale_x_log10(labels = comma_format(big.mark = ".", decimal.mark = ",")) +
+             # scale_y_log10(labels = comma_format(big.mark = ".", decimal.mark = ",")) +
+             # scale_x_continuous(labels = comma_format(big.mark = ".", decimal.mark = ",")) +
+             scale_y_continuous(limits = c(0, 1)) +
+             # stat_compare_means(method = "wilcox.test", comparisons = comp_depths) +
+             geom_signif(annotations = 'ns', y_position = 0.85, xmin = 1, xmax = 2, size = 0.3, textsize = 4.5, color = "black") +
+             geom_signif(annotations = '****', y_position = 0.90, xmin = 2, xmax = 3, size = 0.3, textsize = 4.5, color = "black")+
+             geom_signif(annotations = '****', y_position = 0.95, xmin = 1, xmax = 3, size = 0.3, textsize = 4.5, color = "black")+
+             labs(y = "Diversity", x = "Layers") +
+             theme(axis.text.x = element_text(angle = 90,hjust = 1,face = "italic"))
     )
   }
   rm(data_name, vari_name, taxon, index)
 }
 
-### Teste de Significancia
+### Significance Test
 compare_means(formula = diversity_index ~ depths, data = complete_shannon.norm_species, 
               method = "wilcox.test", p.adjust.method = "bonferroni")
 
@@ -917,7 +926,10 @@ box.dvst.depths_shannon.norm_family + theme_light()
 box.dvst.depths_shannon.norm_genus + theme_light()
 box.dvst.depths_shannon.norm_species + theme_light()
 
-### Salvando imagens (PDF)
+
+############################################################################ EXPORTING FILES #############################################################################
+
+### exporting files (PDF)
 for (taxon in taxons){
   for(index in indexes){
     data_name <- get(paste0("box.dvst.depths_",index,"_",taxon))
@@ -928,7 +940,7 @@ for (taxon in taxons){
   rm(data_name, vari_name, index, taxon)
 }
 
-### Salvando imagens (PNG)
+### exporting files (PNG)
 for (taxon in taxons){
   for(index in indexes){
     data_name <- get(paste0("box.dvst.depths_",index,"_",taxon))
@@ -939,7 +951,7 @@ for (taxon in taxons){
   rm(data_name, vari_name, index, taxon)
 }
 
-### Salvando imagens (SVG)
+### exporting files (SVG)
 for (taxon in taxons){
   for(index in indexes){
     data_name <- get(paste0("box.dvst.depths_",index,"_",taxon))
@@ -951,7 +963,7 @@ for (taxon in taxons){
 }
 
 
-##### Boxplot - Abundancia por camada
+##### Boxplot - Abundance per depth
 
 for (taxon in taxons){
   for(index in indexes){
@@ -959,31 +971,31 @@ for (taxon in taxons){
     vari_name <- paste0("box.abdc.depths","_",index,"_",taxon)
     Layers <- factor(depths, levels = c("SRF","DCM","MES"), ordered = TRUE)
     assign(vari_name, ggplot(data_name, aes(x = Layers, y = log10(abund), color = Layers)) +
-       geom_boxplot(aes(fill = Layers),outlier.shape=NA) +
-       # geom_jitter(aes(shape=shapes), position=position_jitter(width=.1, height=0), size = 2.5) + # COM FORMAS
-       geom_jitter(position=position_jitter(width=.1, height=0), size = 2) + # SEM FORMAS
-       scale_color_manual(labels = c("SRF", "DCM", "MES"),
-                          values = c("#303F9F","#D32F2F","#FFA000")) +
-       scale_fill_manual(labels = c("SRF", "DCM", "MES"),
-                         values = c("#40C4FF","#F06292","#FFD600")) +
-       scale_shape_manual(labels = c("064","065","068","076","078","098","111","112"),
-                          values = c(0,1,2,3,4,5,7,9)) +
-       # scale_x_continuous(labels = comma_format(big.mark = ".", decimal.mark = ",")) +
-       # scale_y_log10(labels = comma_format(big.mark = ".", decimal.mark = ",")) +
-       # scale_x_continuous(labels = comma_format(big.mark = ".", decimal.mark = ",")) +
-       scale_y_continuous(labels = comma_format(big.mark = ".", decimal.mark = ",")) +
-       # stat_compare_means(method = "wilcox.test", comparisons = comp_depths) +
-       geom_signif(annotations = 'ns', y_position = 8.00, xmin = 1, xmax = 2, size = 0.3, textsize = 4.5, color = "black") +
-       geom_signif(annotations = 'ns', y_position = 8.15, xmin = 2, xmax = 3, size = 0.3, textsize = 4.5, color = "black")+
-       geom_signif(annotations = 'ns', y_position = 8.30, xmin = 1, xmax = 3, size = 0.3, textsize = 4.5, color = "black")+
-       labs(y = "log10(Abundance)", x = "Layers") +
-       theme(axis.text.x = element_text(angle = 90,hjust = 1,face = "italic"))
+             geom_boxplot(aes(fill = Layers),outlier.shape=NA) +
+             # geom_jitter(aes(shape=shapes), position=position_jitter(width=.1, height=0), size = 2.5) + # COM FORMAS
+             geom_jitter(position=position_jitter(width=.1, height=0), size = 2) + # SEM FORMAS
+             scale_color_manual(labels = c("SRF", "DCM", "MES"),
+                                values = c("#020202","#330000","#FF6600")) +
+             scale_fill_manual(labels = c("SRF", "DCM", "MES"),
+                               values = c("#303F9F","#D32F2F","#FFA000")) +
+             scale_shape_manual(labels = c("064","065","068","076","078","098","111","112"),
+                                values = c(0,1,2,3,4,5,7,9)) +
+             # scale_x_continuous(labels = comma_format(big.mark = ".", decimal.mark = ",")) +
+             # scale_y_log10(labels = comma_format(big.mark = ".", decimal.mark = ",")) +
+             # scale_x_continuous(labels = comma_format(big.mark = ".", decimal.mark = ",")) +
+             scale_y_continuous(labels = comma_format(big.mark = ".", decimal.mark = ",")) +
+             # stat_compare_means(method = "wilcox.test", comparisons = comp_depths) +
+             geom_signif(annotations = 'ns', y_position = 8.00, xmin = 1, xmax = 2, size = 0.3, textsize = 4.5, color = "black") +
+             geom_signif(annotations = 'ns', y_position = 8.15, xmin = 2, xmax = 3, size = 0.3, textsize = 4.5, color = "black")+
+             geom_signif(annotations = 'ns', y_position = 8.30, xmin = 1, xmax = 3, size = 0.3, textsize = 4.5, color = "black")+
+             labs(y = "log10(Abundance)", x = "Layers") +
+             theme(axis.text.x = element_text(angle = 90,hjust = 1,face = "italic"))
     )
   }
   rm(data_name, vari_name, taxon, index)
 }
 
-### Teste de Significancia
+### Significance Test
 compare_means(formula = abund ~ depths, data = complete_shannon.norm_species,
               method = "wilcox.test", p.adjust.method = "bonferroni")
 
@@ -995,7 +1007,9 @@ box.abdc.depths_shannon.norm_family + theme_light()
 box.abdc.depths_shannon.norm_genus + theme_light()
 box.abdc.depths_shannon.norm_species + theme_light()
 
-### Salvando imagens (PDF)
+############################################################################ EXPORTING FILES #############################################################################
+
+### exporting files (PDF)
 for (taxon in taxons){
   for(index in indexes){
     data_name <- get(paste0("box.abdc.depths_",index,"_",taxon))
@@ -1006,7 +1020,7 @@ for (taxon in taxons){
   rm(data_name, vari_name, index, taxon)
 }
 
-### Salvando imagens (PNG)
+### exporting files (PNG)
 for (taxon in taxons){
   for(index in indexes){
     data_name <- get(paste0("box.abdc.depths_",index,"_",taxon))
@@ -1017,7 +1031,7 @@ for (taxon in taxons){
   rm(data_name, vari_name, index, taxon)
 }
 
-### Salvando imagens (SVG)
+### exporting files (SVG)
 for (taxon in taxons){
   for(index in indexes){
     data_name <- get(paste0("box.abdc.depths_",index,"_",taxon))
@@ -1029,9 +1043,9 @@ for (taxon in taxons){
 }
 
 
-##### Abundância x Diversidade (media das estações por camada)
+##### Abundance and Diversity (average of stations per depth)
 
-##### Resgatando dados do dataframe completo
+##### Retrieving full dataframe data
 for (taxon in taxons){
   for(index in indexes){
     data_name <- get(paste0("complete_",index,"_",taxon))
@@ -1041,7 +1055,7 @@ for (taxon in taxons){
   rm(data_name, vari_name, taxon, index)
 }
 
-##### Agrupando linhas por estacao e camada simultaneamente
+##### Grouping lines by station and layer simultaneously
 for (taxon in taxons){
   for(index in indexes){
     for(depth in depths_name){
@@ -1056,7 +1070,7 @@ for (taxon in taxons){
   rm(data_name, vari_name, taxon, depth, station)
 }
 
-##### Calculando a media de cada coluna
+##### Calculating the average of each column
 for (taxon in taxons){
   for(index in indexes){
     for(depth in depths_name){
@@ -1070,7 +1084,7 @@ for (taxon in taxons){
   rm(data_name, vari_name, taxon, depth, station)
 }
 
-##### Transpondo o dataframe
+##### Transposing the dataframe
 for (taxon in taxons){
   for(index in indexes){
     for(depth in depths_name){
@@ -1083,7 +1097,7 @@ for (taxon in taxons){
   rm(data_name, taxon, depth, station)
 }
 
-##### Renomeando a linha
+##### Renaming the line
 for (taxon in taxons){
   for(index in indexes){
     for(depth in depths_name){
@@ -1097,7 +1111,7 @@ for (taxon in taxons){
   rm(data_name, taxon, depth, station)
 }
 
-##### TESTES COM INDEX: SHANNON.NORM, TAXON: SPECIES
+##### TESTS WITH INDEX: SHANNON.NORM, TAXON: SPECIES
 species_SRF <- rbind(T064.SRF_shannon.norm_species.mean,T065.SRF_shannon.norm_species.mean,T068.SRF_shannon.norm_species.mean,
                      T076.SRF_shannon.norm_species.mean,T078.SRF_shannon.norm_species.mean,T098.SRF_shannon.norm_species.mean,
                      T111.SRF_shannon.norm_species.mean,T112.SRF_shannon.norm_species.mean)
@@ -1157,7 +1171,10 @@ for (taxon in taxons){
 
 stac.dvst.abdc.mean_species + theme_light()
 
-### Salvando imagens (PDF)
+
+############################################################################ EXPORTING FILES #############################################################################
+
+### exporting files (PDF)
 for (taxon in taxons){
   for(index in indexes){
     data_name <- get(paste0("stac.dvst.abdc.mean_",taxon))
@@ -1169,7 +1186,7 @@ for (taxon in taxons){
   rm(data_name, vari_name, index, taxon)
 }
 
-### Salvando imagens (PNG)
+### exporting files (PNG)
 for (taxon in taxons){
   for(index in indexes){
     data_name <- get(paste0("stac.dvst.abdc.mean_",taxon))
@@ -1181,7 +1198,7 @@ for (taxon in taxons){
   rm(data_name, vari_name, index, taxon)
 }
 
-### Salvando imagens (SVG)
+### exporting files (SVG)
 for (taxon in taxons){
   for(index in indexes){
     data_name <- get(paste0("stac.dvst.abdc.mean_",taxon))
@@ -1195,7 +1212,7 @@ for (taxon in taxons){
 
 taxons <- c("kingdom", "phylum", "class", "order", "family", "genus", "species")
 
-### Construindo Layout (grade) das figuras finais
+### Building layout (grid) of the final figures
 mounting_1 <- stac.dvst.abdc_shannon.norm_species + theme_light() +
   stac.dvst.abdc.mean_species + theme_light() +
   stac.dvst.stt_shannon.norm_species + theme_light() +
@@ -1210,27 +1227,104 @@ mounting_2 <- box.dvst.depths_shannon.norm_species + theme_light() +
   theme(legend.position='top')
 mounting_2
 
-### Salvando imagens (PDF)
-ggsave(filename = "~/gitlab/meta_taraocean/data/results/output/biodiversity/plots/pdf/mounting/mounting_1.pdf", mounting_1,
+############################################################################ EXPORTING FILES #############################################################################
+
+### exporting files (PDF)
+ggsave(filename = "~/Documentos/meta_taraocean/data/results/output/biodiversity/plots/pdf/mounting/mounting_1.pdf", mounting_1,
        width = 30, height = 20, dpi = 500, units = "cm", device='pdf')
-ggsave(filename = "~/gitlab/meta_taraocean/data/results/output/biodiversity/plots/pdf/mounting/mounting_2.pdf", mounting_2,
+ggsave(filename = "~/Documentos/meta_taraocean/data/results/output/biodiversity/plots/pdf/mounting/mounting_2.pdf", mounting_2,
        width = 30, height = 15, dpi = 500, units = "cm", device='pdf')
 
-### Salvando imagens (PNG)
-ggsave(filename = "~/gitlab/meta_taraocean/data/results/output/biodiversity/plots/png/mounting/mounting_1.png", mounting_1,
+### exporting files (PNG)
+ggsave(filename = "~/Documentos/meta_taraocean/data/results/output/biodiversity/plots/png/mounting/mounting_1.png", mounting_1,
        width = 30, height = 20, dpi = 500, units = "cm", device='png')
-ggsave(filename = "~/gitlab/meta_taraocean/data/results/output/biodiversity/plots/png/mounting/mounting_2.png", mounting_2,
+ggsave(filename = "~/Documentos/meta_taraocean/data/results/output/biodiversity/plots/png/mounting/mounting_2.png", mounting_2,
        width = 30, height = 15, dpi = 500, units = "cm", device='png')
 
-### Salvando imagens (SVG)
+### exporting files (SVG)
 mounting_1
-dev.copy(svg,"~/gitlab/meta_taraocean/data/results/output/biodiversity/plots/svg/mounting/mounting_1.svg", width = 8, height = 6)
+dev.copy(svg,"~/Documentos/meta_taraocean/data/results/output/biodiversity/plots/svg/mounting/mounting_1.svg", width = 8, height = 6)
 dev.off()
 mounting_2
-dev.copy(svg,"~/gitlab/meta_taraocean/data/results/output/biodiversity/plots/svg/mounting/mounting_2.svg", width = 8, height = 6)
+dev.copy(svg,"~/Documentos/meta_taraocean/data/results/output/biodiversity/plots/svg/mounting/mounting_2.svg", width = 8, height = 6)
 dev.off()
 
-##### Média Taxonômica
+
+##### Boxplot - Proportion of domains per depth
+
+data_prop_kingdom_depth <- data_kingdom
+data_prop_kingdom_depth$depth <- sapply(strsplit(rownames(data_prop_kingdom_depth), split = " - "), "[[" , 1)
+data_prop_kingdom_depth$samples <- as.character(sapply(strsplit(rownames(data_prop_kingdom_depth), split = " - "), "[[" , 3))
+data_prop_kingdom_depth %>% 
+  pivot_longer(Viruses:Archaea, names_to = "domain", values_to = "n") %>% 
+  group_by(samples) %>% 
+  mutate(total_samples = sum(n), prop = round(n/total_samples, 4),
+         depth = factor(depth, levels = c("SRF", "DCM", "MES"))) -> data_prop_kingdom_depth_plot 
+
+prop_domain_depth <- 
+  data_prop_kingdom_depth_plot %>%
+  ggplot(aes(x = depth, y = prop, color = depth)) +
+  geom_boxplot(aes(fill = depth)) +
+  scale_color_manual(labels = c("SRF", "DCM", "MES"),
+                     values = c("#020202","#330000","#FF6600")) +
+  scale_fill_manual(labels = c("SRF", "DCM", "MES"),
+                    values = c("#303F9F","#D32F2F","#FFA000")) +
+  facet_wrap(~domain) +
+  geom_signif(annotations = '', y_position = 1.05, xmin = 1, xmax = 2, size = 0.3, textsize = 4.5, color = "black") +
+  geom_signif(annotations = '', y_position = 1.10, xmin = 2, xmax = 3, size = 0.3, textsize = 4.5, color = "black")+
+  geom_signif(annotations = '', y_position = 1.15, xmin = 1, xmax = 3, size = 0.3, textsize = 4.5, color = "black")+
+  labs(y = "Proportion", x = "Layers")
+# stat_compare_means(method = "wilcox.test",
+#                    comparisons = list(c("SRF", "DCM"), c("SRF", "MES"), c("DCM", "MES")))
+prop_domain_depth
+
+############################################################################ EXPORTING FILES #############################################################################
+
+save(data_kingdom, data_prop_kingdom_depth, data_prop_kingdom_depth_plot, 
+     prop_domain_depth, file = "prop_depth.RData")
+
+
+##### Boxplot - Proportion of domains per ocean
+
+data_prop_kingdom_ocean <- data_kingdom
+data_prop_kingdom_ocean$ocean <- oceans
+data_prop_kingdom_ocean$samples <- as.character(sapply(strsplit(rownames(data_prop_kingdom_ocean), split = " - "), "[[" , 3))
+data_prop_kingdom_ocean %>% 
+  pivot_longer(Viruses:Archaea, names_to = "domain", values_to = "n") %>% 
+  group_by(samples) %>% 
+  mutate(total_samples = sum(n), prop = round(n/total_samples, 4),
+         ocean = factor(ocean, levels = c("IO", "SAO", "SPO"))) -> data_prop_kingdom_ocean_plot 
+
+prop_domain_ocean <- 
+  data_prop_kingdom_ocean_plot %>%
+  ggplot(aes(x = ocean, y = prop, color = ocean)) +
+  geom_boxplot(aes(fill = ocean)) +
+  scale_color_manual(labels = c("IO", "SAO", "SPO"),
+                     values = c("#303F9F","#D32F2F","#DAA520")) +
+  scale_fill_manual(labels = c("IO", "SAO", "SPO"),
+                    values = c("#7f80c7", "#ec45bd", "#dcbf73")) +
+  facet_wrap(~domain) +
+  geom_signif(annotations = '', y_position = 1.05, xmin = 1, xmax = 2, size = 0.3, textsize = 4.5, color = "black") +
+  geom_signif(annotations = '', y_position = 1.10, xmin = 2, xmax = 3, size = 0.3, textsize = 4.5, color = "black")+
+  geom_signif(annotations = '', y_position = 1.15, xmin = 1, xmax = 3, size = 0.3, textsize = 4.5, color = "black")+
+  labs(y = "Proportion", x = "Layers")
+# stat_compare_means(method = "wilcox.test",
+#                    comparisons = list(c("IO", "SAO"), c("IO", "SPO"), c("SAO", "SPO")))
+prop_domain_ocean
+
+############################################################################ EXPORTING FILES #############################################################################
+
+save(data_kingdom, data_prop_kingdom_ocean, data_prop_kingdom_ocean_plot, 
+     prop_domain_ocean, file = "prop_ocean.RData")
+
+
+
+
+#####################################################################################################################################################################
+############################################################################ OTHER TESTS ############################################################################
+#####################################################################################################################################################################
+
+##### Taxonomic Average
 names_groups <- c("DCM - T064 - 594324", "DCM - T064 - 594385", "DCM - T068 - 594415", "DCM - T065 - 594382", "SRF - T078 - 594411",
                   "SRF - T065 - 594359", "SRF - T068 - 594391", "DCM - T065 - 594414", "SRF - T065 - 594320", "DCM - T065 - 594291", 
                   "SRF - T065 - 594361", "SRF - T064 - 599150", "DCM - T098 - 599079", "SRF - T068 - 599129", "DCM - T068 - 599056",
@@ -1319,6 +1413,9 @@ value_kingdom <- c(G1_sum$Viruses,G1_sum$Bacteria,G1_sum$Archaea,
 dataplot_kingdom <- data.frame(sample_kingdom, condition_kingdom, value_kingdom)
 
 
+############################################################################ EXPORTING FILES #############################################################################
+
+
 ### Salvando imagens (PDF)
 ggsave(filename = "~/meta_taraocean/data/results/output/biodiversity/plots/pdf/mounting/taxonomic.mean.pdf", taxo_kingdom,
        width = 15, height = 10, dpi = 500, units = "cm", device='pdf')
@@ -1374,6 +1471,8 @@ taxo_kingdom <- ggplot(dataplot_kingdom, aes(fill=condition_kingdom, y=value_kin
         axis.text.x = element_text(vjust=0.6))
 taxo_kingdom
 
+############################################################################ EXPORTING FILES #############################################################################
+
 save(data_kingdom, prop_depth, prop_SRF, prop_DCM, prop_MES, Layers,
      prop_PERCENT, sample_kingdom, condition_kingdom, value_kingdom, 
      dataplot_kingdom, mat_pal_kgd, taxo_kingdom, file = "prop_depth.RData")
@@ -1413,13 +1512,15 @@ prop_domain <-
   scale_fill_manual(labels = c("SRF", "DCM", "MES"),
                     values = c("#40C4FF","#F06292","#FFD600")) +
   facet_wrap(~domain) +
-  geom_signif(annotations = '', y_position = 1.05, xmin = 1, xmax = 2, size = 0.3, textsize = 4.5, color = "black") +
-  geom_signif(annotations = '', y_position = 1.10, xmin = 2, xmax = 3, size = 0.3, textsize = 4.5, color = "black")+
-  geom_signif(annotations = '', y_position = 1.15, xmin = 1, xmax = 3, size = 0.3, textsize = 4.5, color = "black")+
-  labs(y = "Proportion", x = "Layers")
-  # stat_compare_means(method = "wilcox.test", 
-  #                    comparisons = list(c("SRF", "DCM"), c("SRF", "MES"), c("DCM", "MES")))
+  # geom_signif(annotations = '', y_position = 1.05, xmin = 1, xmax = 2, size = 0.3, textsize = 4.5, color = "black") +
+  # geom_signif(annotations = '', y_position = 1.10, xmin = 2, xmax = 3, size = 0.3, textsize = 4.5, color = "black")+
+  # geom_signif(annotations = '', y_position = 1.15, xmin = 1, xmax = 3, size = 0.3, textsize = 4.5, color = "black")+
+  labs(y = "Proportion", x = "Layers") + 
+  stat_compare_means(method = "wilcox.test",
+                     comparisons = list(c("SRF", "DCM"), c("SRF", "MES"), c("DCM", "MES")))
 prop_domain
+
+############################################################################ EXPORTING FILES #############################################################################
 
 ### Salvando imagens (PDF)
 ggsave(filename = "~/gitlab/meta_taraocean/data/results/output/biodiversity/plots/pdf/mounting/prop_domain.pdf", prop_domain,
@@ -1433,3 +1534,5 @@ ggsave(filename = "~/gitlab/meta_taraocean/data/results/output/biodiversity/plot
 prop_domain
 dev.copy(svg,"~/gitlab/meta_taraocean/data/results/output/biodiversity/plots/svg/mounting/prop_domain.svg", width = 5, height = 8)
 dev.off()
+
+

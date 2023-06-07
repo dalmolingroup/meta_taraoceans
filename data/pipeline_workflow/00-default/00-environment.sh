@@ -17,7 +17,7 @@ source 00-var.sh
 
 ### Instalations
 
-cd $instalers
+#cd $instalers
 
 ### Miniconda
 wget https://repo.anaconda.com/miniconda/Miniconda3-py39_4.9.2-Linux-x86_64.sh
@@ -26,8 +26,8 @@ chmod u+x Miniconda3-latest-Linux-x86_64.sh
 ./Miniconda3-latest-Linux-x86_64.sh
 
 ### protocolMeta
-conda install anaconda-client
-conda env create arthurvinx/protocolMeta
+#conda install anaconda-client
+#conda env create arthurvinx/protocolMeta
 
 
 ### Configuring medusaPipeline

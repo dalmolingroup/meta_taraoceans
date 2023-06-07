@@ -1,8 +1,8 @@
 ### Ativando o protocolMeta
-set +eu
-PS1=dummy
-. $(conda info --base)/etc/profile.d/conda.sh
-conda activate protocolMeta
+#set +eu
+#PS1=dummy
+#. $(conda info --base)/etc/profile.d/conda.sh
+#conda activate protocolMeta
 
 
 ############################################################ Download Samples ############################################################
